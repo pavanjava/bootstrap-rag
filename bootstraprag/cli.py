@@ -19,19 +19,17 @@ def create_zip(project_name):
 @click.argument('project_name')
 @click.option('--template', type=click.Choice(['simple-search', 'hybrid-search', 'llamaindex-rag', 'rag-with-cot', 'rag-with-ReACT', 'rag-with-HyDE']),
               prompt="Which template would you like to use?")
-@click.option('--framework', type=click.Choice(['llamaindex', 'langchain', 'haystack']),
-              prompt="Which framework would you like to use?")
+@click.option('--technology', type=click.Choice(['llamaindex', 'langchain', 'haystack', 'qdrant']),
+              prompt="Which technology would you like to use?")
 @click.option('--observability', type=click.Choice(['Yes', 'No']), prompt="Would you like to set up observability?")
 @click.option('--api_key', prompt="Please provide your OpenAI API key (leave blank to skip)", default='',
               required=False)
 @click.option('--data_source', type=click.Choice(['PDF', 'TXT']),
               prompt="Which data source would you like to use?")
-@click.option('--additional_data_source', type=click.Choice(['Yes', 'No']),
-              prompt="Would you like to add another data source?")
 @click.option('--vector_db', type=click.Choice(['Yes', 'No']), prompt="Would you like to use a vector database?")
-def create(project_name, template, framework, observability, api_key, data_source, additional_data_source, vector_db):
+def create(project_name, template, technology, observability, api_key, data_source, vector_db):
     """Creates a new project with the specified type."""
-    template_path = Path(__file__).parent / 'templates' / template
+    template_path = Path(__file__).parent / 'templates' / technology / template
     project_path = Path.cwd() / project_name
 
     if project_path.exists():
