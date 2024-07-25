@@ -9,7 +9,6 @@ while True:
 
     # Check if the user wants to terminate the loop
     if user_query.lower() == "bye" or user_query.lower() == "exit":
-        client.close()
         break
 
     response = base_rag.query(query_string=user_query)

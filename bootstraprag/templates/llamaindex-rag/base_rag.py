@@ -104,7 +104,7 @@ class BaseRAG:
         storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
         logger.info("indexing the nodes in VectorStoreIndex")
         index = VectorStoreIndex(
-            nodes=nodes,
+            nodes=self.nodes,
             storage_context=storage_context,
             transformations=Settings.transformations,
         )
@@ -124,5 +124,5 @@ class BaseRAG:
         self.hyde_query_engine = hyde_query_engine
 
     def query(self, query_string: str) -> RESPONSE_TYPE:
-        response = self.hyde_query_engine.query(str_or_query_bundle=user_query)
+        response = self.hyde_query_engine.query(str_or_query_bundle=query_string)
         return response
