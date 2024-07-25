@@ -37,7 +37,7 @@ class BaseRAG:
         Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
     ]
 
-    def __init__(self, data_path: str, chunk_size: int = 512, chunk_overlap: int = 200, required_exts: list[str] = ['pdf'],
+    def __init__(self, data_path: str, chunk_size: int = 512, chunk_overlap: int = 200, required_exts: list[str] = ['.pdf'],
                  show_progress: bool = False, similarity_top_k: int = 3):
         # load the local data directory and chunk the data for further processing
         self.docs = SimpleDirectoryReader(input_dir=data_path, required_exts=required_exts).load_data(
@@ -63,7 +63,7 @@ class BaseRAG:
         Settings.embed_model = embed_model
         Settings.llm = llm
 
-        Settings.transformations = [text_parser]
+        Settings.transformations = [self.text_parser]
 
         self.text_chunks = []
         self.doc_ids = []
