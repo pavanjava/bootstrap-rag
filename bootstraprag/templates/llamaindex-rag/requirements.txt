@@ -1,0 +1,9 @@
+qdrant-client==1.10.1
+python-dotenv==1.0.1
+llama-index==0.10.58
+llama-index-llms-openai==0.1.27
+llama-index-llms-ollama==0.2.0
+llama-index-embeddings-openai==0.1.11
+llama-index-embeddings-ollama==0.1.2
+llama-index-vector-stores-qdrant==0.2.14
+qdrant-client==1.10.1

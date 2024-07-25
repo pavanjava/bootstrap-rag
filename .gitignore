@@ -163,3 +163,5 @@ cython_debug/
 */.idea
 bootstrap_rag.egg-info
 */bootstraprag.iml
+.DS_Store
+*/.DS_Store

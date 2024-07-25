@@ -17,7 +17,7 @@ def create_zip(project_name):
 
 @click.command()
 @click.argument('project_name')
-@click.option('--template', type=click.Choice(['simple-search', 'hybrid-search', 'simple-rag', 'rag-with-cot', 'rag-with-ReACT', 'rag-with-HyDE']),
+@click.option('--template', type=click.Choice(['simple-search', 'hybrid-search', 'llamaindex-rag', 'rag-with-cot', 'rag-with-ReACT', 'rag-with-HyDE']),
               prompt="Which template would you like to use?")
 @click.option('--framework', type=click.Choice(['llamaindex', 'langchain', 'haystack']),
               prompt="Which framework would you like to use?")
