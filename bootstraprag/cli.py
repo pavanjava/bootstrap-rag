@@ -26,8 +26,9 @@ def create(project_name, framework, template, observability):
     observability_choices = []
 
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
-        template_choices = ['simple-rag', 'self-rag', 'rag-with-cot', 'rag-with-ReACT', 'rag-with-HyDE']
+        template_choices = ['simple-rag', 'self-rag', 'rag-with-cot', 'rag-with-react', 'rag-with-hyde']
     elif framework == 'None':
+        framework = 'qdrant'
         template_choices = ['simple-search', 'hybrid-search']
 
     template = click.prompt("Which template would you like to use?",
@@ -38,7 +39,28 @@ def create(project_name, framework, template, observability):
         observability = click.prompt("Do you wish to enable observability?",
                                      type=click.Choice(observability_choices)
                                      )
+
     click.echo(f'You have selected framework: {framework} and template: {template} and observability: {observability}')
+    download_and_extract_template(project_name, framework, template, observability)
+
+
+def download_and_extract_template(project_name, framework, template, observability_selection):
+    if observability_selection == 'Yes':
+        folder_name = template.replace('-', '_') + '_observability'
+        base_path = Path(__file__).parent / 'templates' / framework / folder_name
+    else:
+        base_path = Path(__file__).parent / 'templates' / framework / str(template).replace('-', '_')
+    project_path = Path.cwd() / project_name
+
+    if project_path.exists():
+        click.echo(f"Error: Project directory {project_name} already exists!")
+        return
+
+    try:
+        shutil.copytree(base_path, project_path)
+        click.echo(f"Project {project_name} created successfully at {project_path}")
+    except Exception as e:
+        click.echo(f"Error: {e}")
 
 
 cli.add_command(create)
