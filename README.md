@@ -5,3 +5,5 @@ this project will bootstrap and scaffold the projects for specific semantic sear
 - `git clone git@github.com:pavanjava/bootstrap-rag.git`
 - `pip install -e .`
 - `bootstraprag create <PROJECT_NAME>`
+
+Note: Only select the `llamaindex` or `None` framework for now, others in progress.
