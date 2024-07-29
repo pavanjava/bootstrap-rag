@@ -29,7 +29,7 @@ class ReActWithQueryEngine:
         Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
     ]
 
-    def __init__(self, input_dir: str, similarity_top_k: int = 3):
+    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100, show_progress: bool = False):
         self.index_loaded = False
         self.similarity_top_k = similarity_top_k
         self.input_dir = input_dir
@@ -37,6 +37,7 @@ class ReActWithQueryEngine:
         self._engine = None
         self.agent: ReActAgent = None
         self.query_engine_tools = []
+        self.show_progress = show_progress
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
@@ -52,27 +53,32 @@ class ReActWithQueryEngine:
         logger.info("initializing the global settings")
         Settings.embed_model = embed_model
         Settings.llm = llm
+        Settings.chunk_size = chunk_size
+        Settings.chunk_overlap = chunk_overlap
 
         # Create a local Qdrant vector store
         logger.info("initializing the vector store related objects")
-        client = qdrant_client.QdrantClient(url=os.environ['DB_URL'], api_key=os.environ['DB_API_KEY'])
-        self.vector_store = QdrantVectorStore(client=client, collection_name=os.environ['COLLECTION_NAME'])
+        self.client: qdrant_client.QdrantClient = qdrant_client.QdrantClient(url=os.environ['DB_URL'], api_key=os.environ['DB_API_KEY'])
+        self.vector_store = QdrantVectorStore(client=self.client, collection_name=os.environ['COLLECTION_NAME'])
         self._load_data_and_create_engine()
 
     def _load_data_and_create_engine(self):
-        try:
-            self._index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
-            self.index_loaded = True
-        except Exception as e:
-            self.index_loaded = False
+        if self.client.collection_exists(collection_name=os.environ['COLLECTION_NAME']):
+            try:
+                self._index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
+                self.index_loaded = True
+            except Exception as e:
+                self.index_loaded = False
 
         if not self.index_loaded:
             # load data
-            _docs = SimpleDirectoryReader(input_dir=self.input_dir).load_data()
+            _docs = SimpleDirectoryReader(input_dir=self.input_dir).load_data(show_progress=self.show_progress)
 
             # build and persist index
-            self._index = VectorStoreIndex.from_documents(documents=_docs)
-
+            storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
+            logger.info("indexing the docs in VectorStoreIndex")
+            self._index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context, show_progress=self.show_progress)
+            
         self._engine = self._index.as_query_engine(similarity_top_k=self.similarity_top_k)
         self._create_query_engine_tools()
 
