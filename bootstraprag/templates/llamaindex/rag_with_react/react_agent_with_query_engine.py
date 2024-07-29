@@ -78,7 +78,7 @@ class ReActWithQueryEngine:
             storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
             logger.info("indexing the docs in VectorStoreIndex")
             self._index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context, show_progress=self.show_progress)
-
+            
         self._engine = self._index.as_query_engine(similarity_top_k=self.similarity_top_k)
         self._create_query_engine_tools()
 
