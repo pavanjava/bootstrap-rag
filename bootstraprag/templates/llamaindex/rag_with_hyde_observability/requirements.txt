@@ -1,6 +1,5 @@
 qdrant-client==1.10.1
 python-dotenv==1.0.1
-qdrant-client==1.10.1
 arize-phoenix==4.14.1
 llama-index==0.10.58
 llama-index-llms-openai==0.1.27
