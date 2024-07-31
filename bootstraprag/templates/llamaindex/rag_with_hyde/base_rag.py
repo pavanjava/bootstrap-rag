@@ -51,12 +51,12 @@ class BaseRAG:
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
-        embed_model = OllamaEmbedding(model_name=os.environ['OLLMA_EMBED_MODEL'], base_url=os.environ['OLLAMA_BASE_URL'])
+        embed_model = OllamaEmbedding(model_name=os.environ['OLLAMA_EMBED_MODEL'], base_url=os.environ['OLLAMA_BASE_URL'])
         # openai embeddings, embedding_model_name="text-embedding-3-large"
         # embed_model = OpenAIEmbedding(embed_batch_size=10, model=embedding_model_name)
 
         # use your prefered llm
-        llm = Ollama(model=os.environ['OLLMA_LLM_MODEL'], base_url=os.environ['OLLAMA_BASE_URL'], request_timeout=600)
+        llm = Ollama(model=os.environ['OLLAMA_LLM_MODEL'], base_url=os.environ['OLLAMA_BASE_URL'], request_timeout=600)
         # llm = OpenAI(model="gpt-4o")
 
         logger.info("initializing the global settings")
