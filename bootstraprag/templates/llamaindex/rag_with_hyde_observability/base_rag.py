@@ -31,6 +31,7 @@ _ = load_dotenv(find_dotenv())
 logging.basicConfig(level=int(os.environ['INFO']))
 logger = logging.getLogger(__name__)
 
+# instrumenting observability
 session = px.launch_app()
 llama_index.core.set_global_handler("arize_phoenix")
 
