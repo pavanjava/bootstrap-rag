@@ -9,7 +9,7 @@ import zipfile
 def cli():
     pass
 
-
+# used for downloading the project as zip.
 def create_zip(project_name):
     zip_path = shutil.make_archive(project_name, 'zip', project_name)
     return zip_path
@@ -27,10 +27,10 @@ def create(project_name, framework, template, observability):
     observability_choices = []
 
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
-        template_choices = ['simple-rag', 'self-rag', 'rag-with-cot', 'rag-with-react', 'rag-with-hyde']
+        template_choices = ['simple-rag', 'rag-with-react', 'rag-with-hyde']
     elif framework == '':
         framework = 'qdrant'
-        template_choices = ['simple-search', 'hybrid-search']
+        template_choices = ['simple-search']
 
     template = click.prompt("Which template would you like to use?",
                             type=click.Choice(template_choices)
