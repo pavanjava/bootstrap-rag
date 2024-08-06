@@ -17,7 +17,7 @@ def create_zip(project_name):
 
 @click.command()
 @click.argument('project_name')
-@click.option('--framework', type=click.Choice(['llamaindex', 'langchain', 'haystack']),
+@click.option('--framework', type=click.Choice(['llamaindex']),
               prompt="Which technology would you like to use (leave blank, if you want to use qdrant direct search)?",
               default='', required=False)
 @click.option('--template', type=click.Choice([]), prompt=False)
