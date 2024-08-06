@@ -3,7 +3,7 @@ from base_rag import BaseRAG
 # this step will do pre processing, indexing in vector store, creating retriever (hyDE).
 # this may take some time based on your document size and chunk strategy.
 base_rag = BaseRAG(show_progress=True,
-                   data_path='<YOUR_DATA_PATH>')  # leaving all the defaults. if needed override them in constructor
+                   data_path='data')  # leaving all the defaults. if needed override them in constructor
 # Start a loop to continually get input from the user
 while True:
     # Get a query from the user

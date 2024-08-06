@@ -2,7 +2,7 @@
 from react_agent_with_query_engine import ReActWithQueryEngine
 
 
-react_with_engine = ReActWithQueryEngine(input_dir='<YOUR_DATA_DIRECTORY>', show_progress=True)
+react_with_engine = ReActWithQueryEngine(input_dir='data', show_progress=True)
 
 # Start a loop to continually get input from the user
 while True:
