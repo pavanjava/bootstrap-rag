@@ -28,7 +28,7 @@ class ReActWithQueryEngine:
         Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
     ]
 
-    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100, show_progress: bool = False):
+    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100, show_progress: bool = False, no_of_iterations: int = 5):
         self.index_loaded = False
         self.similarity_top_k = similarity_top_k
         self.input_dir = input_dir
@@ -37,6 +37,7 @@ class ReActWithQueryEngine:
         self.agent: ReActAgent = None
         self.query_engine_tools = []
         self.show_progress = show_progress
+        self.no_of_iterations = no_of_iterations
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
@@ -109,7 +110,11 @@ class ReActWithQueryEngine:
             llm=Settings.llm,
             verbose=True,
             # context=context
+            max_iterations=self.no_of_iterations
         )
 
     def query(self, user_query: str) -> RESPONSE_TYPE:
-        return self.agent.query(str_or_query_bundle=user_query)
+        try:
+            return self.agent.query(str_or_query_bundle=user_query)
+        except Exception as e:
+            logger.error(f'Error while generating response: {e}')

@@ -34,7 +34,7 @@ class ReActWithQueryEngine:
     ]
 
     def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100,
-                 show_progress: bool = False):
+                 show_progress: bool = False, no_of_iterations: int = 5):
         self.index_loaded = False
         self.similarity_top_k = similarity_top_k
         self.input_dir = input_dir
@@ -43,6 +43,7 @@ class ReActWithQueryEngine:
         self.agent: ReActAgent = None
         self.query_engine_tools = []
         self.show_progress = show_progress
+        self.no_of_iterations = no_of_iterations
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
@@ -112,12 +113,19 @@ class ReActWithQueryEngine:
         #     You will answer questions about Uber and Lyft as in the persona of a sorcerer \
         #     and veteran stock market investor.
         # """
-        self.agent = ReActAgent.from_tools(
-            self.query_engine_tools,
-            llm=Settings.llm,
-            verbose=True,
-            # context=context
-        )
+        try:
+            self.agent = ReActAgent.from_tools(
+                self.query_engine_tools,
+                llm=Settings.llm,
+                verbose=True,
+                # context=context
+                max_iterations=self.no_of_iterations
+            )
+        except Exception as e:
+            logger.error(e)
 
     def query(self, user_query: str) -> RESPONSE_TYPE:
-        return self.agent.query(str_or_query_bundle=user_query)
+        try:
+            return self.agent.query(str_or_query_bundle=user_query)
+        except Exception as e:
+            logger.error(f'Error while generating response: {e}')
