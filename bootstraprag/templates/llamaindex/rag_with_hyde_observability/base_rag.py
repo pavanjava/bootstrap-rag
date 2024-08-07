@@ -130,5 +130,8 @@ class BaseRAG:
         self.hyde_query_engine = hyde_query_engine
 
     def query(self, query_string: str) -> RESPONSE_TYPE:
-        response = self.hyde_query_engine.query(str_or_query_bundle=query_string)
-        return response
+        try:
+            response = self.hyde_query_engine.query(str_or_query_bundle=query_string)
+            return response
+        except Exception as e:
+            logger.error(f'Error while inference: {e}')
