@@ -10,4 +10,8 @@ this project will bootstrap and scaffold the projects for specific semantic sear
 - `pip install -e .`
 - `bootstraprag create <PROJECT_NAME>`
 
+### known Issues
+
+- simple-rag project will work with no observability. with observability is under progress
+
 Note: Only select the `llamaindex` framework or leave it empty for now, others frameworks in progress.

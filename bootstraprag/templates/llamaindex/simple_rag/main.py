@@ -1,8 +1,8 @@
 # driver code
-from react_agent_with_query_engine import ReActWithQueryEngine
+from simple_rag import SimpleRAG
 
 
-react_with_engine = ReActWithQueryEngine(input_dir='data', show_progress=True)
+simpleRAG = SimpleRAG(input_dir='data', show_progress=True)
 
 # Start a loop to continually get input from the user
 while True:
@@ -13,5 +13,5 @@ while True:
     if user_query.lower() == "bye" or user_query.lower() == "exit":
         break
 
-    response = react_with_engine.query(user_query=user_query)
-    print(response)  
+    response = simpleRAG.do_rag(user_query=user_query)
+    print(response)
