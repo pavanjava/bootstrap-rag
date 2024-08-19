@@ -1,4 +1,4 @@
-python-dotenv==1.0.1
+llama-agents==0.0.14
 llama-index==0.10.65
 llama-index-llms-openai==0.1.29
 llama-index-llms-ollama==0.2.2
