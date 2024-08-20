@@ -3,11 +3,13 @@ import shutil
 from pathlib import Path
 import os
 import zipfile
+from InquirerPy import inquirer
 
 
 @click.group()
 def cli():
     pass
+
 
 # used for downloading the project as zip.
 def create_zip(project_name):
@@ -31,15 +33,18 @@ def create(project_name, framework, template, observability):
     elif framework == 'None':
         framework = 'qdrant'
         template_choices = ['simple-search']
-
-    template = click.prompt("Which template would you like to use?",
-                            type=click.Choice(template_choices)
-                            )
+    # Use InquirerPy to select template with arrow keys
+    template = inquirer.select(
+        message="Which template would you like to use?",
+        choices=template_choices,
+    ).execute()
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
         observability_choices = ['Yes', 'No']
-        observability = click.prompt("Do you wish to enable observability?",
-                                     type=click.Choice(observability_choices)
-                                     )
+        # Use InquirerPy to select observability with arrow keys
+        observability = inquirer.select(
+            message="Do you wish to enable observability?",
+            choices=observability_choices,
+        ).execute()
 
     click.echo(f'You have selected framework: {framework} and template: {template} and observability: {observability}')
     download_and_extract_template(project_name, framework, template, observability)
