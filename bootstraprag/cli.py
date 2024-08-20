@@ -19,15 +19,17 @@ def create_zip(project_name):
 
 @click.command()
 @click.argument('project_name')
-@click.option('--framework', type=click.Choice(['llamaindex', 'None']),
-              prompt="Which technology would you like to use ('None' will make you to use qdrant direct search)?",
-              default='', required=False)
+@click.option('--framework', type=click.Choice([]),prompt=False)
 @click.option('--template', type=click.Choice([]), prompt=False)
 @click.option('--observability', type=click.Choice([]), prompt=False)
 def create(project_name, framework, template, observability):
     template_choices = []
     observability_choices = []
-
+    framework_choices = ['llamaindex', 'None']
+    framework = inquirer.select(
+        message="Which technology would you like to use ('None' will make you to use qdrant direct search)?",
+        choices=framework_choices
+    ).execute()
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
         template_choices = ['simple-rag', 'rag-with-react', 'rag-with-hyde', 'rag-with-flare']
     elif framework == 'None':
