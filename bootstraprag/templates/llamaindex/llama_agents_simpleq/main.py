@@ -4,6 +4,7 @@ from agents_core import SimpleQAgent
 
 
 simple_agent = SimpleQAgent()
+
 # needed for running in a notebook
 nest_asyncio.apply()
 

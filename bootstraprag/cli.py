@@ -3,11 +3,13 @@ import shutil
 from pathlib import Path
 import os
 import zipfile
+from InquirerPy import inquirer
 
 
 @click.group()
 def cli():
     pass
+
 
 # used for downloading the project as zip.
 def create_zip(project_name):
@@ -17,29 +19,34 @@ def create_zip(project_name):
 
 @click.command()
 @click.argument('project_name')
-@click.option('--framework', type=click.Choice(['llamaindex', 'None']),
-              prompt="Which technology would you like to use ('None' will make you to use qdrant direct search)?",
-              default='', required=False)
+@click.option('--framework', type=click.Choice([]),prompt=False)
 @click.option('--template', type=click.Choice([]), prompt=False)
 @click.option('--observability', type=click.Choice([]), prompt=False)
 def create(project_name, framework, template, observability):
     template_choices = []
     observability_choices = []
-
+    framework_choices = ['llamaindex', 'None']
+    framework = inquirer.select(
+        message="Which technology would you like to use ('None' will make you to use qdrant direct search)?",
+        choices=framework_choices
+    ).execute()
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
         template_choices = ['simple-rag', 'rag-with-react', 'rag-with-hyde', 'rag-with-flare']
     elif framework == 'None':
         framework = 'qdrant'
         template_choices = ['simple-search']
-
-    template = click.prompt("Which template would you like to use?",
-                            type=click.Choice(template_choices)
-                            )
+    # Use InquirerPy to select template with arrow keys
+    template = inquirer.select(
+        message="Which template would you like to use?",
+        choices=template_choices,
+    ).execute()
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
         observability_choices = ['Yes', 'No']
-        observability = click.prompt("Do you wish to enable observability?",
-                                     type=click.Choice(observability_choices)
-                                     )
+        # Use InquirerPy to select observability with arrow keys
+        observability = inquirer.select(
+            message="Do you wish to enable observability?",
+            choices=observability_choices,
+        ).execute()
 
     click.echo(f'You have selected framework: {framework} and template: {template} and observability: {observability}')
     download_and_extract_template(project_name, framework, template, observability)

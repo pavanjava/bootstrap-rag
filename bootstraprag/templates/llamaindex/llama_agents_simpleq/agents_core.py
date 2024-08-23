@@ -4,6 +4,7 @@ from llama_agents import (
     ControlPlaneServer,
     SimpleMessageQueue,
 )
+
 from llama_index.core import Settings
 from llama_index.core.agent import ReActAgent
 from llama_index.core.tools import FunctionTool
@@ -16,6 +17,7 @@ embed_model = OllamaEmbedding(model_name=os.environ['OLLAMA_EMBED_MODEL'], base_
 
 Settings.llm = llm
 Settings.embed_model = embed_model
+
 
 # create an agent
 def get_the_secret_fact() -> str:
