@@ -31,7 +31,13 @@ def create(project_name, framework, template, observability):
         choices=framework_choices
     ).execute()
     if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
-        template_choices = ['simple-rag', 'rag-with-react', 'rag-with-hyde', 'rag-with-flare']
+        template_choices = [
+            'simple-rag',
+            'rag-with-react',
+            'rag-with-hyde',
+            'rag-with-flare',
+            'llama-agents-with-simpleq'
+        ]
     elif framework == 'None':
         framework = 'qdrant'
         template_choices = ['simple-search']
