@@ -8,3 +8,4 @@ llama-index-vector-stores-qdrant==0.2.16
 qdrant-client==1.11.0
 fastapi==0.109.2
 uvicorn==0.30.6
+pydantic==2.9.0
