@@ -59,7 +59,7 @@ def create(project_name, framework, template, observability):
 
 def download_and_extract_template(project_name, framework, template, observability_selection):
     if observability_selection == 'Yes':
-        folder_name = template.replace('-', '_') + '_observability'
+        folder_name = template.replace('-', '_') + '_with_observability'
         base_path = Path(__file__).parent / 'templates' / framework / folder_name
     else:
         base_path = Path(__file__).parent / 'templates' / framework / str(template).replace('-', '_')
