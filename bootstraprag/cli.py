@@ -24,7 +24,6 @@ def create_zip(project_name):
 @click.option('--observability', type=click.Choice([]), prompt=False)
 def create(project_name, framework, template, observability):
     template_choices = []
-    observability_choices = []
     framework_choices = ['llamaindex', 'None']
     framework = inquirer.select(
         message="Which technology would you like to use ('None' will make you to use qdrant direct search)?",
