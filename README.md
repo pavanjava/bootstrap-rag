@@ -22,3 +22,11 @@ this project will bootstrap and scaffold the projects for specific semantic sear
 - simple-rag project will work with no observability. with observability is under progress
 
 Note: Only select the `llamaindex` framework or leave it empty for now, others frameworks in progress.
+
+#### Resources
+
+![Demo GIF](assets/demo.gif)
+
+![Qdrant](assets/qdrant.png)
+
+![Arize Phoenix](assets/observability.png)
