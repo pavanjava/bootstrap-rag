@@ -13,7 +13,9 @@ this project will bootstrap and scaffold the projects for specific semantic sear
 ### how to run the project ?
 - `git clone git@github.com:pavanjava/bootstrap-rag.git`
 - `pip install -e .`
-- `bootstraprag create <PROJECT_NAME>`
+- run `bootstraprag create <PROJECT_NAME>`
+- Navigate to newly created project `<PROJECT_NAME>` the run `pip install -r requirements.txt`
+- Once all the modules are installed run `python main.py`
 
 ### known Issues
 
