@@ -23,12 +23,12 @@ logger = logging.getLogger(__name__)
 
 
 class ReActWithQueryEngine:
-
     RESPONSE_TYPE = Union[
         Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
     ]
 
-    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100, show_progress: bool = False, no_of_iterations: int = 5):
+    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100,
+                 show_progress: bool = False, no_of_iterations: int = 5, required_exts: list[str] = ['.pdf', '.txt']):
         self.index_loaded = False
         self.similarity_top_k = similarity_top_k
         self.input_dir = input_dir
@@ -38,6 +38,7 @@ class ReActWithQueryEngine:
         self.query_engine_tools = []
         self.show_progress = show_progress
         self.no_of_iterations = no_of_iterations
+        self.required_exts = required_exts
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
@@ -58,7 +59,8 @@ class ReActWithQueryEngine:
 
         # Create a local Qdrant vector store
         logger.info("initializing the vector store related objects")
-        self.client: qdrant_client.QdrantClient = qdrant_client.QdrantClient(url=os.environ['DB_URL'], api_key=os.environ['DB_API_KEY'])
+        self.client: qdrant_client.QdrantClient = qdrant_client.QdrantClient(url=os.environ['DB_URL'],
+                                                                             api_key=os.environ['DB_API_KEY'])
         self.vector_store = QdrantVectorStore(client=self.client, collection_name=os.environ['COLLECTION_NAME'])
         self._load_data_and_create_engine()
 
@@ -72,13 +74,15 @@ class ReActWithQueryEngine:
 
         if not self.index_loaded:
             # load data
-            _docs = SimpleDirectoryReader(input_dir=self.input_dir).load_data(show_progress=self.show_progress)
+            _docs = (SimpleDirectoryReader(input_dir=self.input_dir, required_exts=self.required_exts)
+                     .load_data(show_progress=self.show_progress))
 
             # build and persist index
             storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
             logger.info("indexing the docs in VectorStoreIndex")
-            self._index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context, show_progress=self.show_progress)
-            
+            self._index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context,
+                                                          show_progress=self.show_progress)
+
         self._engine = self._index.as_query_engine(similarity_top_k=self.similarity_top_k)
         self._create_query_engine_tools()
 

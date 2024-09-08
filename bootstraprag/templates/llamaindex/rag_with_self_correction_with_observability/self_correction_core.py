@@ -1,20 +1,21 @@
 from llama_index.core import (
-    SimpleDirectoryReader,
     VectorStoreIndex,
-    StorageContext,
-    Settings
+    SimpleDirectoryReader,
+    Settings,
+    StorageContext
 )
-from llama_index.core.tools import QueryEngineTool, ToolMetadata
+from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.vector_stores.qdrant import QdrantVectorStore
-from llama_index.core.agent import ReActAgent
-from llama_index.llms.ollama import Ollama
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
+from llama_index.core.query_engine import RetryQueryEngine, RetrySourceQueryEngine, RetryGuidelineQueryEngine
+from llama_index.core.evaluation import RelevancyEvaluator, GuidelineEvaluator
+from llama_index.core.evaluation.guideline import DEFAULT_GUIDELINES
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
+import qdrant_client
 import llama_index
 import phoenix as px
-import qdrant_client
 import logging
 import os
 
@@ -28,22 +29,20 @@ session = px.launch_app()
 llama_index.core.set_global_handler("arize_phoenix")
 
 
-class ReActWithQueryEngine:
+class SelfCorrectingRAG:
     RESPONSE_TYPE = Union[
         Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
     ]
 
-    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100,
-                 show_progress: bool = False, no_of_iterations: int = 5, required_exts: list[str] = ['.pdf', '.txt']):
-        self.index_loaded = False
-        self.similarity_top_k = similarity_top_k
+    def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128,
+                 chunk_overlap: int = 100, show_progress: bool = False, no_of_retries: int = 5,
+                 required_exts: list[str] = ['.pdf', '.txt']):
+
         self.input_dir = input_dir
-        self._index = None
-        self._engine = None
-        self.agent: ReActAgent = None
-        self.query_engine_tools = []
+        self.similarity_top_k = similarity_top_k
         self.show_progress = show_progress
-        self.no_of_iterations = no_of_iterations
+        self.no_of_retries = no_of_retries
+        self.index_loaded = False
         self.required_exts = required_exts
 
         # use your prefered vector embeddings model
@@ -68,9 +67,13 @@ class ReActWithQueryEngine:
         self.client: qdrant_client.QdrantClient = qdrant_client.QdrantClient(url=os.environ['DB_URL'],
                                                                              api_key=os.environ['DB_API_KEY'])
         self.vector_store = QdrantVectorStore(client=self.client, collection_name=os.environ['COLLECTION_NAME'])
+        self.query_response_evaluator = RelevancyEvaluator()
+        self.base_query_engine = None
+
         self._load_data_and_create_engine()
 
     def _load_data_and_create_engine(self):
+
         if self.client.collection_exists(collection_name=os.environ['COLLECTION_NAME']):
             try:
                 self._index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
@@ -88,46 +91,41 @@ class ReActWithQueryEngine:
             logger.info("indexing the docs in VectorStoreIndex")
             self._index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context,
                                                           show_progress=self.show_progress)
+            self.base_query_engine = self._index.as_query_engine()
 
-        self._engine = self._index.as_query_engine(similarity_top_k=self.similarity_top_k)
-        self._create_query_engine_tools()
+    # The retry query engine uses an evaluator to improve the response from a base query engine.
+    #
+    # It does the following:
+    #
+    # first queries the base query engine, then
+    # use the evaluator to decided if the response passes.
+    # If the response passes, then return response,
+    # Otherwise, transform the original query with the evaluation result (query, response, and feedback)
+    # into a new query, Repeat up to max_retries
+    def query_with_retry_query_engine(self, query: str) -> RESPONSE_TYPE:
 
-    def _create_query_engine_tools(self):
-        # can have more than one as per the requirement
-        self.query_engine_tools.append(
-            QueryEngineTool(
-                query_engine=self._engine,
-                metadata=ToolMetadata(
-                    name="test_tool_engine",  # change this accordingly
-                    description=(
-                        "Provides information about user query based on the information that you have. "
-                        "Use a detailed plain text question as input to the tool."
-                    ),
-                ),
-            )
-        )
-        self._create_react_agent()
+        retry_query_engine = RetryQueryEngine(self.base_query_engine, self.query_response_evaluator,
+                                              max_retries=self.no_of_retries)
+        retry_response = retry_query_engine.query(query)
+        return retry_response
 
-    def _create_react_agent(self):
-        # [Optional] Add Context
-        # context = """\
-        # You are a stock market sorcerer who is an expert on the companies Lyft and Uber.\
-        #     You will answer questions about Uber and Lyft as in the persona of a sorcerer \
-        #     and veteran stock market investor.
-        # """
-        try:
-            self.agent = ReActAgent.from_tools(
-                self.query_engine_tools,
-                llm=Settings.llm,
-                verbose=True,
-                # context=context
-                max_iterations=self.no_of_iterations
-            )
-        except Exception as e:
-            logger.error(e)
+    # The Source Retry modifies the query source nodes by filtering the existing
+    # source nodes for the query based on llm node evaluation.
+    def query_with_source_query_engine(self, query: str) -> RESPONSE_TYPE:
+        retry_source_query_engine = RetrySourceQueryEngine(self.base_query_engine,
+                                                           self.query_response_evaluator)
+        retry_source_response = retry_source_query_engine.query(query)
+        return retry_source_response
 
-    def query(self, user_query: str) -> RESPONSE_TYPE:
-        try:
-            return self.agent.query(str_or_query_bundle=user_query)
-        except Exception as e:
-            logger.error(f'Error while generating response: {e}')
+    # This module tries to use guidelines to direct the evaluator's behavior.
+    # You can customize your own guidelines.
+    def query_with_guideline_query_engine(self, query: str) -> RESPONSE_TYPE:
+        # Guideline eval
+        guideline_eval = GuidelineEvaluator(
+            guidelines=DEFAULT_GUIDELINES + "\nThe response should not be overly long.\n"
+                                            "The response should try to summarize where possible.\n"
+        )  # just for example
+        retry_guideline_query_engine = RetryGuidelineQueryEngine(self.base_query_engine,
+                                                                 guideline_eval, resynthesize_query=True)
+        retry_guideline_response = retry_guideline_query_engine.query(query)
+        return retry_guideline_response

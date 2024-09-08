@@ -14,4 +14,4 @@ while True:
         break
 
     response = react_with_engine.query(user_query=user_query)
-    print(response)  
+    print(response)
