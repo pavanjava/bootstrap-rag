@@ -35,6 +35,7 @@ def create(project_name, framework, template, observability):
             'rag-with-react',
             'rag-with-hyde',
             'rag-with-flare',
+            'rag-with-self-correction',
             'llama-agents-with-simpleq'
         ]
     elif framework == 'None':
