@@ -62,6 +62,7 @@ class SelfCorrectingRAG:
         self.vector_store = QdrantVectorStore(client=self.client, collection_name=os.environ['COLLECTION_NAME'])
         self.query_response_evaluator = RelevancyEvaluator()
         self.base_query_engine = None
+        self._index = None
 
         self._load_data_and_create_engine()
 
@@ -70,6 +71,7 @@ class SelfCorrectingRAG:
         if self.client.collection_exists(collection_name=os.environ['COLLECTION_NAME']):
             try:
                 self._index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
+                self.base_query_engine = self._index.as_query_engine()
                 self.index_loaded = True
             except Exception as e:
                 self.index_loaded = False
