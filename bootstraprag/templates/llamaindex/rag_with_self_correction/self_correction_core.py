@@ -29,7 +29,8 @@ class SelfCorrectingRAG:
     ]
 
     def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128,
-                 chunk_overlap: int = 100, show_progress: bool = False, no_of_retries: int = 5, required_exts: list[str] = ['.pdf', '.txt']):
+                 chunk_overlap: int = 100, show_progress: bool = False, no_of_retries: int = 5,
+                 required_exts: list[str] = ['.pdf', '.txt']):
 
         self.input_dir = input_dir
         self.similarity_top_k = similarity_top_k
@@ -108,7 +109,8 @@ class SelfCorrectingRAG:
     # source nodes for the query based on llm node evaluation.
     def query_with_source_query_engine(self, query: str) -> RESPONSE_TYPE:
         retry_source_query_engine = RetrySourceQueryEngine(self.base_query_engine,
-                                                           self.query_response_evaluator)
+                                                           self.query_response_evaluator,
+                                                           max_retries=self.no_of_retries)
         retry_source_response = retry_source_query_engine.query(query)
         return retry_source_response
 
@@ -121,6 +123,7 @@ class SelfCorrectingRAG:
                                             "The response should try to summarize where possible.\n"
         )  # just for example
         retry_guideline_query_engine = RetryGuidelineQueryEngine(self.base_query_engine,
-                                                                 guideline_eval, resynthesize_query=True)
+                                                                 guideline_eval, resynthesize_query=True,
+                                                                 max_retries=self.no_of_retries)
         retry_guideline_response = retry_guideline_query_engine.query(query)
         return retry_guideline_response

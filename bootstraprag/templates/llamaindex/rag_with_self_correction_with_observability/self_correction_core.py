@@ -7,6 +7,7 @@ from llama_index.core import (
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.vector_stores.qdrant import QdrantVectorStore
+from llama_index. core. base. base_query_engine import BaseQueryEngine
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
 from llama_index.core.query_engine import RetryQueryEngine, RetrySourceQueryEngine, RetryGuidelineQueryEngine
 from llama_index.core.evaluation import RelevancyEvaluator, GuidelineEvaluator
@@ -68,8 +69,8 @@ class SelfCorrectingRAG:
                                                                              api_key=os.environ['DB_API_KEY'])
         self.vector_store = QdrantVectorStore(client=self.client, collection_name=os.environ['COLLECTION_NAME'])
         self.query_response_evaluator = RelevancyEvaluator()
-        self.base_query_engine = None
-        self._index = None
+        self.base_query_engine: BaseQueryEngine = None
+        self._index: VectorStoreIndex = None
 
         self._load_data_and_create_engine()
 
