@@ -16,7 +16,6 @@ class HybridSearch:
         # set the dense and sparse embedding models
         self.client.set_model(os.environ.get('DENSE_MODEL'))
         self.client.set_sparse_model(os.environ.get('SPARSE_MODEL'))
-
         self.vector_dimension = vector_dimension
         self.distance = distance
         self.collection_name = collection_name
