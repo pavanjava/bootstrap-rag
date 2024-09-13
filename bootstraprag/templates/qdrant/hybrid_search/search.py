@@ -15,6 +15,7 @@ class HybridSearch:
 
         # set the dense and sparse embedding models
         self.client.set_model(os.environ.get('DENSE_MODEL'))
+        self.client.set_sparse_model(os.environ.get('SPARSE_MODEL'))
         self.vector_dimension = vector_dimension
         self.distance = distance
         self.collection_name = collection_name
@@ -49,7 +50,7 @@ class HybridSearch:
             collection_name=self.collection_name,
             documents=self.documents,
             metadata=self.metadata,
-            batch_size=128, # a batch os 128 embeddings will be pushed in a single request
+            # batch_size=128,  # a batch os 128 embeddings will be pushed in a single request
             ids=tqdm(range(len(self.documents)))
         )
 
