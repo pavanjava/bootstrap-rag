@@ -1,5 +1,6 @@
 import os
-from uuid import uuid4
+import json
+from tqdm import tqdm
 from qdrant_client import qdrant_client, models
 from dotenv import find_dotenv, load_dotenv
 from qdrant_client.http.models import Distance
@@ -9,41 +10,56 @@ from qdrant_client.conversions.common_types import QueryResponse, UpdateResult
 class SimpleSearch:
     _ = load_dotenv(find_dotenv())
 
-    def __init__(self, collection_name: str, vector_dimension: int = 5, distance: Distance = models.Distance.COSINE):
+    def __init__(self, collection_name: str, vector_dimension: int = 384, distance: Distance = models.Distance.COSINE):
         self.client = qdrant_client.QdrantClient(url=os.environ['DB_URL'], api_key=os.environ['DB_API_KEY'])
+        # set the dense and sparse embedding models
+        self.client.set_model(os.environ.get('DENSE_MODEL'))
         self.vector_dimension = vector_dimension
         self.distance = distance
         self.collection_name = collection_name
+
+        self.documents = []
+        self.metadata = []
+
         self._create_collection(collection_name=collection_name)
 
     def _create_collection(self, collection_name):
         if not self.client.collection_exists(collection_name=collection_name):
             self.client.create_collection(
                 collection_name=collection_name,
-                vectors_config=models.VectorParams(size=self.vector_dimension, distance=self.distance))
+                vectors_config=self.client.get_fastembed_vector_params()
+            )
+
+    def _read_data(self):
+        payload_path = "data/startups-mini.json"
+
+        with open(payload_path) as fd:
+            for line in fd:
+                obj = json.loads(line)
+                self.documents.append(obj.pop("description"))
+                self.metadata.append(obj)
 
     def insert(self) -> UpdateResult:
+        self._read_data()
         # simple boilerplate code adjust it accordingly
-        response: UpdateResult = self.client.upsert(
+        self.client.add(
             collection_name=self.collection_name,
-            points=[
-                models.PointStruct(
-                    id=str(uuid4()),
-                    payload={
-                        "text": "this is auto generated bootstrap code",
-                    },
-                    vector=[0.9, 0.1, 0.1, 0.4, -0.8],
-                ),
-            ],
+            documents=self.documents,
+            metadata=self.metadata,
+            batch_size=128,  # a batch os 128 embeddings will be pushed in a single request
+            ids=tqdm(range(len(self.documents)))
         )
 
-        return response
-
-    def search(self) -> QueryResponse:
-        # simple boilerplate code adjust it accordingly
-        response: QueryResponse = self.client.query_points(
+    def search(self, input_text: str) -> QueryResponse:
+        search_result = self.client.query(
             collection_name=self.collection_name,
-            query=[0.9, 0.1, 0.2, 0.4, -0.6], # <--- Dense vector
+            query_text=input_text,
+            query_filter=None,  # If you don't want any filters for now
+            limit=5,  # 5 the closest results
         )
+        # `search_result` contains found vector ids with similarity scores
+        # along with the stored payload
 
-        return response
+        # Select and return metadata
+        metadata = [hit.metadata for hit in search_result]
+        return metadata  # if not return entire search_result
