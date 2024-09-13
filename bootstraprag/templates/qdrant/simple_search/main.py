@@ -7,6 +7,8 @@ _ = load_dotenv(find_dotenv())
 
 simple_search = SimpleSearch(collection_name=os.environ['COLLECTION_NAME'])
 
-# TODO: code actual implementation of these below methods.
-simple_search.insert()
-simple_search.search()
+# open the below insert for the first time to index the data
+# simple_search.insert()
+
+result = simple_search.search(input_text="Chicago")
+print(result)

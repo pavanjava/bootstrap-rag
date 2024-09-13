@@ -7,14 +7,14 @@ this is a boot straped project using bootstrap-rag cli tool. This project assume
 .
 ├── __init__.py
 ├── __pycache__
-├── docker-compose.yml
+├── .env
 ├── main.py
 ├── readme.md
 ├── requirements.txt
 └── search.py
 ```
-- docker-compose.yml: if your machine does not have qdrant installed dont worry run this docker-compose file
-  - `docker-compose up -d`
+- docker-compose.yml: if your machine does not have qdrant installed don't worry run this `docker-compose-dev.yml` in setups folder
+  - `docker-compose -f docker-compose-dev.yml up -d`
 - requirements.txt: this file has all the dependencies that a project need
 - search.py: the core logic is present in this file
 - main.py: this is the driver code to test.
