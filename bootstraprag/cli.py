@@ -40,7 +40,7 @@ def create(project_name, framework, template, observability):
         ]
     elif framework == 'None':
         framework = 'qdrant'
-        template_choices = ['simple-search']
+        template_choices = ['simple-search', 'hybrid-search', 'hybrid-search-advanced']
     # Use InquirerPy to select template with arrow keys
     template = inquirer.select(
         message="Which template would you like to use?",
