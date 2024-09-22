@@ -15,3 +15,9 @@
     - query_with_guideline_query_engine(query=user_query)
 
 - This code is enabled with Observability powered by `Arize Phoenix`.
+
+### How to expose RAG as API
+- run `python apis.py`
+- verify the swagger redoc and documentation as below
+- open browser and hit `http://localhost:8000/redoc`
+- open browser and hit `http://localhost:8000/documentation`
