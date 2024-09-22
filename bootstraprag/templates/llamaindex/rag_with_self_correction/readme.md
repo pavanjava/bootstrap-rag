@@ -13,3 +13,9 @@
   - query_with_retry_query_engine(query=user_query)
   - query_with_source_query_engine(query=user_query)
   - query_with_guideline_query_engine(query=user_query)
+
+### How to expose RAG as API
+- run `python apis.py`
+- verify the swagger redoc and documentation as below
+- open browser and hit `http://localhost:8000/redoc`
+- open browser and hit `http://localhost:8000/documentation`
