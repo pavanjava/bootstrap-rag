@@ -1,28 +1,15 @@
-from llama_agents import LocalLauncher
-import nest_asyncio
-from agents_core import SimpleQAgent
+from llama_deploy import LlamaDeployClient, ControlPlaneConfig
 
+# points to deployed control plane
+client = LlamaDeployClient(ControlPlaneConfig())
 
-simple_agent = SimpleQAgent()
+query = "what is attention?"
+session = client.create_session()
 
-# needed for running in a notebook
-nest_asyncio.apply()
+result1 = session.run(service_name="rag_workflow_with_retry_query_engine", query=query)
+result2 = session.run(service_name="rag_workflow_with_retry_source_query_engine", query=query)
+result3 = session.run(service_name="rag_workflow_with_retry_guideline_query_engine", query=query)
 
-# launch it
-launcher = LocalLauncher(
-    [simple_agent.agent_server_1],
-    simple_agent.control_plane,
-    simple_agent.message_queue,
-)
-
-# Start a loop to continually get input from the user
-while True:
-    # Get a query from the user
-    user_query = input("Enter your query [type 'bye' to 'exit']: ")
-
-    # Check if the user wants to terminate the loop
-    if user_query.lower() == "bye" or user_query.lower() == "exit":
-        break
-
-    result = launcher.launch_single(user_query)
-    print(result)
+print(f'response from rag_workflow_with_retry_query_engine is {result1}')
+print(f'response from rag_workflow_with_retry_source_query_engine is {result2}')
+print(f'response from rag_workflow_with_retry_guideline_query_engine is {result3}')

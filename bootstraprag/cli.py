@@ -1,8 +1,6 @@
 import click
 import shutil
 from pathlib import Path
-import os
-import zipfile
 from InquirerPy import inquirer
 
 
@@ -36,7 +34,9 @@ def create(project_name, framework, template, observability):
             'rag-with-hyde',
             'rag-with-flare',
             'rag-with-self-correction',
-            'llama-agents-with-simpleq'
+            'llama-deploy-with-simplemq',
+            'llama-deploy-with-rabbitmq',
+            'llama-deploy-with-kafka'
         ]
     elif framework == 'None':
         framework = 'qdrant'
