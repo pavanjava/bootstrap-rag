@@ -1,0 +1,8 @@
+llama-deploy==0.1.0
+llama-index==0.11.7
+llama-index-vector-stores-qdrant==0.3.0
+llama-index-llms-ollama==0.3.1
+llama-index-embeddings-fastembed==0.2.0
+llama-index-embeddings-ollama==0.3.0
+llama-index-postprocessor-rankgpt-rerank == 0.2.0
+aio_pika==9.4.3
