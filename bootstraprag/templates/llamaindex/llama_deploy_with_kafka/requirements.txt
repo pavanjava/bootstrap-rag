@@ -5,3 +5,5 @@ llama-index-llms-ollama==0.3.1
 llama-index-embeddings-fastembed==0.2.0
 llama-index-embeddings-ollama==0.3.0
 llama-index-postprocessor-rankgpt-rerank == 0.2.0
+aiokafka==0.11.0
+kafka-python-ng==2.2.2

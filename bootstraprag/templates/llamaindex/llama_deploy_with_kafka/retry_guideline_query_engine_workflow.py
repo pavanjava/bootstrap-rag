@@ -9,15 +9,15 @@ from llama_index.core.workflow import (
     step
 )
 from llama_index.core.base.base_query_engine import BaseQueryEngine
-from llama_index.core.query_engine import RetrySourceQueryEngine
+from llama_index.core.query_engine import RetryGuidelineQueryEngine
 from llama_index.core import (VectorStoreIndex, Settings, StorageContext, SimpleDirectoryReader)
-from llama_index.core.evaluation import RelevancyEvaluator
+from llama_index.core.evaluation import GuidelineEvaluator
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core.evaluation.guideline import DEFAULT_GUIDELINES
 from dotenv import load_dotenv, find_dotenv
-
-from workflows.events import QueryEngineEvent
+from events import QueryEngineEvent
 
 _ = load_dotenv(find_dotenv())
 
@@ -25,11 +25,10 @@ logging.basicConfig(level=int(os.environ['INFO']))
 logger = logging.getLogger(__name__)
 
 
-class RAGWorkflowWithRetrySourceQueryEngine(Workflow):
+class RAGWorkflowWithRetryGuidelineQueryEngine(Workflow):
     def __init__(self, index: VectorStoreIndex, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.index: VectorStoreIndex = index
-        self.query_response_evaluator = RelevancyEvaluator()
 
     @step
     async def create_retry_query_engine(self, ctx: Context, ev: StartEvent) -> QueryEngineEvent | None:
@@ -56,14 +55,19 @@ class RAGWorkflowWithRetrySourceQueryEngine(Workflow):
         no_of_retries = await ctx.get("no_of_retries")
         base_query_engine: BaseQueryEngine = ev.base_query_engine
 
-        retry_source_query_engine = RetrySourceQueryEngine(base_query_engine, self.query_response_evaluator,
-                                                           max_retries=no_of_retries)
-        retry_source_response = retry_source_query_engine.query(query)
-        logger.info(f"response for query is: {retry_source_response}")
-        return StopEvent(result=str(retry_source_response))
+        # Guideline eval
+        guideline_eval = GuidelineEvaluator(
+            guidelines=DEFAULT_GUIDELINES + "\nThe response should not be overly long.\n"
+                                            "The response should try to summarize where possible.\n"
+        )  # just for example
+        retry_guideline_query_engine = RetryGuidelineQueryEngine(base_query_engine, guideline_eval,
+                                                                 resynthesize_query=True, max_retries=no_of_retries)
+        retry_guideline_response = retry_guideline_query_engine.query(query)
+        logger.info(f"response for query is: {retry_guideline_response}")
+        return StopEvent(result=str(retry_guideline_response))
 
 
-def build_rag_workflow_with_retry_source_query_engine() -> RAGWorkflowWithRetrySourceQueryEngine:
+def build_rag_workflow_with_retry_guideline_query_engine() -> RAGWorkflowWithRetryGuidelineQueryEngine:
     index_loaded = False
     # host points to qdrant in docker-compose.yml
     client = qdrant_client.QdrantClient(url=os.environ['DB_URL'], api_key=os.environ['DB_API_KEY'])
@@ -88,11 +92,11 @@ def build_rag_workflow_with_retry_source_query_engine() -> RAGWorkflowWithRetryS
 
     if not index_loaded:
         # load data
-        _docs = (SimpleDirectoryReader(input_dir='../data', required_exts=['.pdf']).load_data(show_progress=True))
+        _docs = (SimpleDirectoryReader(input_dir='data', required_exts=['.pdf']).load_data(show_progress=True))
 
         # build and persist index
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
         logger.info("indexing the docs in VectorStoreIndex")
         index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context, show_progress=True)
 
-    return RAGWorkflowWithRetrySourceQueryEngine(index=index, timeout=120.0)
+    return RAGWorkflowWithRetryGuidelineQueryEngine(index=index, timeout=120.0)
