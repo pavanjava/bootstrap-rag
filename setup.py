@@ -8,8 +8,12 @@ setup(
     install_requires=[
         'click',
     ],
-    entry_points='''
-        [console_scripts]
-        bootstraprag=bootstraprag.cli:cli
-    ''',
+    entry_points={
+        'console_scripts': [
+            'bootstraprag=bootstraprag.cli:cli',
+        ],
+    },
+    package_data={
+        'bootstraprag': ['templates/*'],
+    },
 )
