@@ -4,10 +4,12 @@
 name: Python application
 
 on:
-  push:
-    branches:
-      - main
-# uncomment the below code to enable actions on PR branch also.
+  workflow_dispatch:
+# uncomment the below code to enable actions automatically on main for deployment.
+#  push:
+#    branches:
+#      - main
+# uncomment the below code to enable actions on PR automatically on branch.
 #  pull_request:
 #    branches:
 #      - main
