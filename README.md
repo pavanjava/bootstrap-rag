@@ -11,17 +11,25 @@ this project will bootstrap and scaffold the projects for specific semantic sear
 - In the container shell run `ollama run llama3.1`
 
 ### how to run the project ?
+#### Method-1
+- run `pip install bootstrap-rag`
+- run `bootstraprag create <PROJECT_NAME>`
+- Navigate to newly created project `<PROJECT_NAME>` the run `pip install -r requirements.txt`
+- modify the `.env` file accordingly
+- run `python main.py` for cli experience
+  <b>[or]</b> run `python api_server.py`
+
+#### Method-2
 - `git clone git@github.com:pavanjava/bootstrap-rag.git`
 - `pip install -e .`
 - run `bootstraprag create <PROJECT_NAME>`
 - Navigate to newly created project `<PROJECT_NAME>` the run `pip install -r requirements.txt`
-- Once all the modules are installed run `python main.py`
+- modify the `.env` file accordingly
+- run `python main.py` for cli experience
+  <b>[or]</b> run `python api_server.py`
 
-### known Issues
 
-- simple-rag project will work with no observability. with observability is under progress
-
-Note: Only select the `llamaindex` framework or leave it empty for now, others frameworks in progress.
+Note: Only `llamaindex` and `Qdrant Search` are functional for now, others frameworks [`langchain`, `langgraph`, `haystack`] in progress.
 
 #### Resources
 

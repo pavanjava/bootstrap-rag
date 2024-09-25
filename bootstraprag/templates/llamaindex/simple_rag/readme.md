@@ -8,7 +8,7 @@
 - run `python main.py`
 
 ### How to expose RAG as API
-- run `python apis.py`
+- run `python api_server.py`
 - verify the swagger redoc and documentation as below
 - open browser and hit `http://localhost:8000/redoc`
-- open browser and hit `http://localhost:8000/documentation`
+- open browser and hit `http://localhost:8000/docs`
