@@ -15,7 +15,22 @@
   - query_with_guideline_query_engine(query=user_query)
 
 ### How to expose RAG as API
-- run `python apis.py`
+- run `python api_server.py`
 - verify the swagger redoc and documentation as below
 - open browser and hit `http://localhost:8000/redoc`
-- open browser and hit `http://localhost:8000/documentation`
+- open browser and hit `http://localhost:8000/docs`
+
+### Payload Specification
+
+- Method: POST
+- API: http://localhost:8000/api/v1/chat-completion
+- Body:
+```json
+{
+  "query": "explain mlops architecture",
+  "method": "guideline_query_engine"
+}
+```
+- allowed methods: `source_query_engine`, `guideline_query_engine` and `retry_query_engine` (default)
+
+Note: if you dont pass the method also it works as `retry_query_engine` will be the default engine.

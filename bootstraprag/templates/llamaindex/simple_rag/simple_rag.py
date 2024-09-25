@@ -4,7 +4,6 @@ from llama_index.core import (
     StorageContext,
     Settings
 )
-from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core.agent import ReActAgent
@@ -32,7 +31,7 @@ class SimpleRAG:
         self.index_loaded = False
         self.similarity_top_k = similarity_top_k
         self.input_dir = input_dir
-        self._index = None
+        self._index: VectorStoreIndex = None
         self._engine = None
         self.agent: ReActAgent = None
         self.query_engine_tools = []
@@ -78,7 +77,8 @@ class SimpleRAG:
             # build and persist index
             storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
             logger.info("indexing the docs in VectorStoreIndex")
-            self._index = VectorStoreIndex.from_documents(documents=_docs, storage_context=storage_context,
+            self._index = VectorStoreIndex.from_documents(documents=_docs,
+                                                          storage_context=storage_context,
                                                           show_progress=self.show_progress)
 
     def do_rag(self, user_query: str) -> RESPONSE_TYPE:
