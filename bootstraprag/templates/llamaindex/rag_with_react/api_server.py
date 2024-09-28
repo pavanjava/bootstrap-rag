@@ -19,7 +19,7 @@ class ReactRAGServingAPI(ls.LitAPI, ABC):
 
     def predict(self, query: str):
         try:
-            return self.self_correcting_rag.query(user_query=query)
+            return self.react_with_engine.query(user_query=query)
         except Exception as e:
             return e.args[0]
 
