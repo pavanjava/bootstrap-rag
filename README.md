@@ -15,7 +15,7 @@ this project will bootstrap and scaffold the projects for specific semantic sear
 
 ### how to run the project ?
 #### Method-1
-- run `pip install bootstrap-rag`
+- run `pip install inquirerpy bootstrap-rag`
 - run `bootstraprag create <PROJECT_NAME>`
 - Navigate to newly created project `<PROJECT_NAME>` the run `pip install -r requirements.txt`
 - modify the `.env` file accordingly
