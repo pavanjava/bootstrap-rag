@@ -12,3 +12,5 @@
 - verify the swagger redoc and documentation as below
 - open browser and hit `http://localhost:8000/redoc`
 - open browser and hit `http://localhost:8000/docs`
+
+Note: if you are deploying RAG using docker please change the env file to point to right host
