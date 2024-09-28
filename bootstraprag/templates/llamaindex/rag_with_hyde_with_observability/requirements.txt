@@ -9,3 +9,4 @@ llama-index-embeddings-ollama==0.3.0
 llama-index-vector-stores-qdrant==0.3.0
 llama-index-callbacks-arize-phoenix==0.2.1
 pydantic==2.9.0
+litserve==0.2.2
