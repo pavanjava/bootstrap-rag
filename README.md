@@ -1,6 +1,9 @@
 # bootstrap-rag
 this project will bootstrap and scaffold the projects for specific semantic search and RAG applications along with regular boiler plate code.
 
+### Architecture
+![Arch](assets/architecture.png)
+
 ### prerequisite
 #### Option-1
 - install ollama following this [guide](https://ollama.com/download)
