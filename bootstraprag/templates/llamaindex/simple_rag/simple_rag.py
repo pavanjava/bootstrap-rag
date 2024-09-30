@@ -10,6 +10,7 @@ from llama_index.core.agent import ReActAgent
 from llama_index.llms.ollama import Ollama
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
 from dotenv import load_dotenv, find_dotenv
+from test_set_generator import TestSetGenerator
 from typing import Union
 import qdrant_client
 import logging
@@ -37,6 +38,8 @@ class SimpleRAG:
         self.query_engine_tools = []
         self.show_progress = show_progress
 
+        self.test_set_generator = TestSetGenerator()
+
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
         embed_model = OllamaEmbedding(model_name=os.environ['OLLAMA_EMBED_MODEL'],
@@ -63,6 +66,10 @@ class SimpleRAG:
         self._create_index()
 
     def _create_index(self):
+
+        # create an evaluation test set
+        self.test_set_generator.generate_test_set(input_dir=self.input_dir)  # leaving defaults as is.
+
         if self.client.collection_exists(collection_name=os.environ['COLLECTION_NAME']):
             try:
                 self._index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
