@@ -10,3 +10,4 @@ arize-phoenix==4.33.1
 llama-index-callbacks-arize-phoenix==0.2.1
 pydantic==2.9.0
 litserve==0.2.2
+deepeval==1.3.2
