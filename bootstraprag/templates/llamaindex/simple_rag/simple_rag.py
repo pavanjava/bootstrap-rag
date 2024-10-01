@@ -10,7 +10,7 @@ from llama_index.core.agent import ReActAgent
 from llama_index.llms.ollama import Ollama
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
 from dotenv import load_dotenv, find_dotenv
-from test_set_generator import TestSetGenerator
+from rag_evaluator import RAGEvaluator
 from typing import Union
 import qdrant_client
 import logging
@@ -38,7 +38,7 @@ class SimpleRAG:
         self.query_engine_tools = []
         self.show_progress = show_progress
 
-        self.test_set_generator = TestSetGenerator()
+        self.rag_evaluator = RAGEvaluator()
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
@@ -67,9 +67,6 @@ class SimpleRAG:
 
     def _create_index(self):
 
-        # create an evaluation test set
-        self.test_set_generator.generate_test_set(input_dir=self.input_dir)  # leaving defaults as is.
-
         if self.client.collection_exists(collection_name=os.environ['COLLECTION_NAME']):
             try:
                 self._index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
@@ -94,4 +91,7 @@ class SimpleRAG:
         query_engine = self._index.as_query_engine(similarity_top_k=self.similarity_top_k)
         logger.info("LLM is thinking...")
         response = query_engine.query(str_or_query_bundle=user_query)
+        logger.info(f'response: {response}')
+        if os.environ.get('IS_EVALUATION_NEEDED') == 'true':
+            self.rag_evaluator.evaluate(user_query=user_query, response_obj=response)
         return response
