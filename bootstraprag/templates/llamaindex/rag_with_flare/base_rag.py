@@ -16,6 +16,7 @@ from llama_index.llms.ollama import Ollama
 # enable if you are using openai
 # from llama_index.llms.openai import OpenAI
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
+from rag_evaluator import RAGEvaluator
 import qdrant_client
 import logging
 from dotenv import load_dotenv, find_dotenv
@@ -59,8 +60,9 @@ class BaseRAG:
         logger.info("initializing the global settings")
         Settings.embed_model = embed_model
         Settings.llm = llm
-
         Settings.transformations = [self.text_parser]
+
+        self.rag_evaluator = RAGEvaluator()
 
         self.text_chunks = []
         self.doc_ids = []
@@ -116,6 +118,8 @@ class BaseRAG:
     def query(self, query_string: str) -> RESPONSE_TYPE:
         try:
             response = self.flare_query_engine.query(str_or_query_bundle=query_string)
+            if os.environ.get('IS_EVALUATION_NEEDED') == 'true':
+                self.rag_evaluator.evaluate(user_query=query_string, response_obj=response)
             return response
         except Exception as e:
             logger.error(f'Error while inference: {e}')

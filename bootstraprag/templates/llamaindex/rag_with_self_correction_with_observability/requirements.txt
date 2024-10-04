@@ -10,3 +10,4 @@ qdrant-client==1.11.1
 pydantic==2.9.0
 arize-phoenix==4.33.1
 litserve==0.2.2
+deepeval==1.3.2
