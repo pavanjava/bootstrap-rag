@@ -10,6 +10,7 @@ from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core.agent import ReActAgent
 from llama_index.llms.ollama import Ollama
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
+from rag_evaluator import RAGEvaluator
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
 import qdrant_client
@@ -56,6 +57,8 @@ class ReActWithQueryEngine:
         Settings.llm = llm
         Settings.chunk_size = chunk_size
         Settings.chunk_overlap = chunk_overlap
+
+        self.rag_evaluator = RAGEvaluator()
 
         # Create a local Qdrant vector store
         logger.info("initializing the vector store related objects")
@@ -119,6 +122,9 @@ class ReActWithQueryEngine:
 
     def query(self, user_query: str) -> RESPONSE_TYPE:
         try:
-            return self.agent.query(str_or_query_bundle=user_query)
+            response = self.agent.query(str_or_query_bundle=user_query)
+            if os.environ.get('IS_EVALUATION_NEEDED') == 'true':
+                self.rag_evaluator.evaluate(user_query=user_query, response_obj=response)
+            return response
         except Exception as e:
             logger.error(f'Error while generating response: {e}')

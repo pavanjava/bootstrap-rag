@@ -8,3 +8,4 @@ llama-index-vector-stores-qdrant==0.3.0
 qdrant-client==1.11.1
 pydantic==2.9.0
 litserve==0.2.2
+deepeval==1.3.2

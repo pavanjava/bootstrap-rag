@@ -11,6 +11,7 @@ from llama_index.core.base.response.schema import Response, StreamingResponse, A
 from llama_index.core.query_engine import RetryQueryEngine, RetrySourceQueryEngine, RetryGuidelineQueryEngine
 from llama_index.core.evaluation import RelevancyEvaluator, GuidelineEvaluator
 from llama_index.core.evaluation.guideline import DEFAULT_GUIDELINES
+from rag_evaluator import RAGEvaluator
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
 import qdrant_client
@@ -55,6 +56,8 @@ class SelfCorrectingRAG:
         Settings.llm = llm
         Settings.chunk_size = chunk_size
         Settings.chunk_overlap = chunk_overlap
+
+        self.rag_evaluator = RAGEvaluator()
 
         # Create a local Qdrant vector store
         logger.info("initializing the vector store related objects")
@@ -126,4 +129,6 @@ class SelfCorrectingRAG:
                                                                  guideline_eval, resynthesize_query=True,
                                                                  max_retries=self.no_of_retries)
         retry_guideline_response = retry_guideline_query_engine.query(query)
+        if os.environ.get('IS_EVALUATION_NEEDED') == 'true':
+            self.rag_evaluator.evaluate(user_query=query, response_obj=retry_guideline_response)
         return retry_guideline_response
