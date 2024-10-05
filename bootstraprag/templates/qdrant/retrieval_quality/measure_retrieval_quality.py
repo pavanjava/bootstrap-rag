@@ -13,7 +13,7 @@ class MeasureRetrievalQuality:
             path=dataset_path, split="train", streaming=True,
             token=os.environ.get('HF_TOKEN')
         )
-        self.collection_name = collection_name
+        self.collection_name = collection_name or os.environ.get('COLLECTION_NAME')
         dataset_iterator = iter(dataset)
         self.train_dataset = [next(dataset_iterator) for _ in range(10000)]
         self.test_dataset = [next(dataset_iterator) for _ in range(1000)]

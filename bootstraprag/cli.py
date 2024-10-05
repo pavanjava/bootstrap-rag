@@ -17,7 +17,7 @@ def create_zip(project_name):
 
 @click.command()
 @click.argument('project_name')
-@click.option('--framework', type=click.Choice([]),prompt=False)
+@click.option('--framework', type=click.Choice([]), prompt=False)
 @click.option('--template', type=click.Choice([]), prompt=False)
 @click.option('--observability', type=click.Choice([]), prompt=False)
 def create(project_name, framework, template, observability):
@@ -40,7 +40,8 @@ def create(project_name, framework, template, observability):
         ]
     elif framework == 'None':
         framework = 'qdrant'
-        template_choices = ['simple-search', 'hybrid-search', 'hybrid-search-advanced', 'retrieval-quality']
+        template_choices = ['simple-search', 'multimodal-search', 'hybrid-search', 'hybrid-search-advanced',
+                            'retrieval-quality']
     # Use InquirerPy to select template with arrow keys
     template = inquirer.select(
         message="Which template would you like to use?",
