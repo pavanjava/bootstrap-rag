@@ -25,5 +25,3 @@ this is a bootstrap project using bootstrap-rag cli tool. This project assume yo
 or
 
 - create a `new_search_file.py` and extend it from `multimodal_search.py` then override the base functionality in the new one.
-
-
