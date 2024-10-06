@@ -34,6 +34,7 @@ def create(project_name, framework, template, observability):
             'rag-with-hyde',
             'rag-with-flare',
             'rag-with-self-correction',
+            'rag-with-controllable-agents',
             'llama-deploy-with-simplemq',
             'llama-deploy-with-rabbitmq',
             'llama-deploy-with-kafka'

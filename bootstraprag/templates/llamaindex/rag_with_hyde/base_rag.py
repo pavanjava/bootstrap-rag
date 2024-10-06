@@ -31,14 +31,13 @@ logging.basicConfig(level=int(os.environ['INFO']))
 logger = logging.getLogger(__name__)
 
 
-
 class BaseRAG:
-
     RESPONSE_TYPE = Union[
         Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
     ]
 
-    def __init__(self, data_path: str, chunk_size: int = 512, chunk_overlap: int = 200, required_exts: list[str] = ['.pdf', '.txt'],
+    def __init__(self, data_path: str, chunk_size: int = 512, chunk_overlap: int = 200,
+                 required_exts: list[str] = ['.pdf', '.txt'],
                  show_progress: bool = False, similarity_top_k: int = 3):
         # load the local data directory and chunk the data for further processing
         self.docs = SimpleDirectoryReader(input_dir=data_path, required_exts=required_exts).load_data(
@@ -52,7 +51,8 @@ class BaseRAG:
 
         # use your prefered vector embeddings model
         logger.info("initializing the OllamaEmbedding")
-        embed_model = OllamaEmbedding(model_name=os.environ['OLLAMA_EMBED_MODEL'], base_url=os.environ['OLLAMA_BASE_URL'])
+        embed_model = OllamaEmbedding(model_name=os.environ['OLLAMA_EMBED_MODEL'],
+                                      base_url=os.environ['OLLAMA_BASE_URL'])
         # openai embeddings, embedding_model_name="text-embedding-3-large"
         # embed_model = OpenAIEmbedding(embed_batch_size=10, model=embedding_model_name)
 
@@ -72,7 +72,7 @@ class BaseRAG:
         self.nodes = []
 
         self.similarity_top_k = similarity_top_k
-        self.hyde_query_engine = None
+        self.hyde_query_engine: TransformQueryEngine = None
 
         # preprocess the data like chunking, nodes, metadata etc
         self._pre_process()
