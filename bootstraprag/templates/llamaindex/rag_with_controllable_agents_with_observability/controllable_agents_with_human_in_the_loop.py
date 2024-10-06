@@ -14,6 +14,12 @@ from rag_evaluator import RAGEvaluator
 from dotenv import load_dotenv, find_dotenv
 import qdrant_client
 import logging
+import phoenix as px
+import llama_index
+
+# instrumenting observability
+session = px.launch_app()
+llama_index.core.set_global_handler("arize_phoenix")
 
 
 class ControllableAgentsWithHumanInLoop:
