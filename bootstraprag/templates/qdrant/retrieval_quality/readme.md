@@ -25,5 +25,5 @@ this is a bootstrap project using bootstrap-rag cli tool. This project assume yo
 or
 
 - create a `new_search_file.py` and extend it from `measure_retrieval_quality.py` then override the base functionality in the new one.
-
+- quick commit
 
