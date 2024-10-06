@@ -8,6 +8,7 @@ from dotenv import load_dotenv, find_dotenv
 
 class MeasureRetrievalQuality:
     def __init__(self, dataset_path: str, collection_name: str, streaming: bool = True):
+        _ = load_dotenv(find_dotenv())
         # path = "Qdrant/arxiv-titles-instructorxl-embeddings"
         dataset = load_dataset(
             path=dataset_path, split="train", streaming=True,
