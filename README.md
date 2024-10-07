@@ -1,10 +1,11 @@
+![Banner](https://raw.githubusercontent.com/pavanjava/bootstrap-rag/refs/heads/main/assets/bootstrap-rag.png)
 # bootstrap-rag
 this project will bootstrap and scaffold the projects for specific semantic search and RAG applications along with regular boiler plate code.
 
 ### Architecture
 ![Arch](assets/architecture.png)
 
-### prerequisite
+### Installing prerequisite
 #### Option-1
 - install ollama following this [guide](https://ollama.com/download)
 - install qdrant follwing this [guide](https://qdrant.tech/documentation/guides/installation/)
@@ -36,8 +37,8 @@ Note: Only `llamaindex` and `Qdrant Search` are functional for now, others frame
 
 #### Resources
 
-![Demo GIF](assets/demo.gif)
+![Demo GIF](https://raw.githubusercontent.com/pavanjava/bootstrap-rag/refs/heads/main/assets/demo.gif)
 
-![Qdrant](assets/qdrant.png)
+![Qdrant](https://raw.githubusercontent.com/pavanjava/bootstrap-rag/refs/heads/main/assets/qdrant.png)
 
-![Arize Phoenix](assets/observability.png)
+![Arize Phoenix](https://raw.githubusercontent.com/pavanjava/bootstrap-rag/refs/heads/main/assets/observability.png)
