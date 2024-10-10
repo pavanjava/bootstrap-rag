@@ -22,12 +22,12 @@ def create_zip(project_name):
 @click.option('--observability', type=click.Choice([]), prompt=False)
 def create(project_name, framework, template, observability):
     template_choices = []
-    framework_choices = ['llamaindex', 'None']
+    framework_choices = ['llamaindex', 'langchain', 'standalone-qdrant', 'standalone-evaluations']
     framework = inquirer.select(
-        message="Which technology would you like to use ('None' will make you to use qdrant direct search)?",
+        message="Which technology would you like to use?",
         choices=framework_choices
     ).execute()
-    if framework == 'llamaindex' or framework == 'langchain' or framework == 'haystack':
+    if framework == 'llamaindex':
         template_choices = [
             'simple-rag',
             'rag-with-react',
@@ -39,8 +39,12 @@ def create(project_name, framework, template, observability):
             'llama-deploy-with-rabbitmq',
             'llama-deploy-with-kafka'
         ]
-    elif framework == 'None':
-        framework = 'qdrant'
+
+    elif framework == 'langchain':
+        template_choices = [
+            'simple-rag'
+        ]
+    elif framework == 'standalone-qdrant':
         template_choices = ['simple-search', 'multimodal-search', 'hybrid-search', 'hybrid-search-advanced',
                             'retrieval-quality']
     # Use InquirerPy to select template with arrow keys

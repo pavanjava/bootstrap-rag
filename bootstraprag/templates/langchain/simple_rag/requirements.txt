@@ -6,3 +6,6 @@ langchain-community==0.3.2
 qdrant-client==1.12.0
 fastembed==0.3.6
 PyMuPDF==1.24.11
+python-dotenv==1.0.1
+litserve==0.2.2
+pydantic==2.9.0
