@@ -1,30 +1,29 @@
-from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
-from langchain_qdrant import QdrantVectorStore
-from langchain_community.document_loaders import WebBaseLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from qdrant_client import QdrantClient
-from qdrant_client.http.models import Distance, VectorParams
+import os
 
-embeddings = FastEmbedEmbeddings()
+from simple_rag import SimpleRAG
+from dotenv import load_dotenv, find_dotenv
 
-client = QdrantClient(url='http://localhost:6333', api_key='th3s3cr3tk3y')
+load_dotenv(find_dotenv())
 
-client.create_collection(
-    collection_name="demo_collection_1",
-    vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+simpleRag = SimpleRAG(
+    file_path='data/mlops.pdf',
+    collection_name=os.environ.get("COLLECTION_NAME"),
+    qdrant_url=os.environ.get("QDRANT_DB_URL"),
+    qdrant_api_key=os.environ.get("QDRANT_DB_KEY")
 )
 
-vector_store = QdrantVectorStore(
-    client=client,
-    collection_name="demo_collection_1",
-    embedding=embeddings
-)
+'''Uncomment the following line to insert data (only needed once) explicitly,
+else the data is inserted on the initialization'''
+# simpleRag.insert_data_with_metadata()
 
-WEBSITE_URL = "https://medium.com/@jaintarun7/multimodal-using-gemini-and-llamaindex-f622a190cc32"
-data = WebBaseLoader(WEBSITE_URL)
-docs = data.load()
+# Start a loop to continually get input from the user
+while True:
+    # Get a query from the user
+    user_query = input("Enter your query [type 'bye' to 'exit']: ")
 
-text_split = RecursiveCharacterTextSplitter(chunk_size=512,chunk_overlap=50)
-chunks = text_split.split_documents(docs)
+    # Check if the user wants to terminate the loop
+    if user_query.lower() == "bye" or user_query.lower() == "exit":
+        break
 
-qdrant = vector_store.from_documents(chunks, embedding=embeddings, api_key='th3s3cr3tk3y')
+    response = simpleRag.query(user_query=user_query)
+    print(f"Answer: {response}")
