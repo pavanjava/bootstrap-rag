@@ -45,6 +45,7 @@ def create(project_name, framework, template, observability):
             'simple-rag'
         ]
     elif framework == 'standalone-qdrant':
+        framework = 'qdrant'
         template_choices = ['simple-search', 'multimodal-search', 'hybrid-search', 'hybrid-search-advanced',
                             'retrieval-quality']
     # Use InquirerPy to select template with arrow keys
