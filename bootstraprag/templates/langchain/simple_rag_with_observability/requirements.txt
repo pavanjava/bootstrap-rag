@@ -9,3 +9,6 @@ PyMuPDF==1.24.11
 python-dotenv==1.0.1
 litserve==0.2.2
 pydantic==2.9.0
+arize-phoenix==5.2.2
+arize-phoenix-otel==0.5.1
+openinference-instrumentation-langchain==0.1.28

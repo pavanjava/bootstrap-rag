@@ -14,6 +14,18 @@ from typing import Any, List
 from uuid import uuid4
 from dotenv import load_dotenv, find_dotenv
 from custom_templates import chat_prompt_template
+from phoenix.otel import register
+from openinference.instrumentation.langchain import LangChainInstrumentor
+import phoenix as px
+
+px.launch_app().view()
+tracer_provider = register(
+    project_name="simple-rag",
+    endpoint="http://127.0.0.1:4317",  # change this to remote if needed
+    set_global_tracer_provider=True
+
+)
+LangChainInstrumentor().instrument(tracer_provider=tracer_provider, skip_dep_check=True)
 
 
 class SimpleRAG:
