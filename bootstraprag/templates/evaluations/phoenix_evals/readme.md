@@ -21,4 +21,3 @@ just replace the `input_data.csv` with your own data, the file has following col
 
 ### What to expect?
 - At the end of process, you can see the `evaluation_report.csv` is created and kept in the parent folder where you can see different aspects of evaluations carried on your input data.
-
