@@ -1,6 +1,6 @@
 ![Banner](https://raw.githubusercontent.com/pavanjava/bootstrap-rag/refs/heads/main/assets/bootstrap-rag.png)
 # bootstrap-rag
-this project will bootstrap and scaffold the projects for specific semantic search and RAG applications along with regular boiler plate code.
+This project will bootstrap and scaffold the projects for specific semantic search and RAG applications along with regular boilerplate code.
 
 ### Architecture
 ![Arch](assets/architecture.png)
