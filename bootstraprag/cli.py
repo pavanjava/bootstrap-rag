@@ -48,6 +48,9 @@ def create(project_name, framework, template, observability):
         framework = 'qdrant'
         template_choices = ['simple-search', 'multimodal-search', 'hybrid-search', 'hybrid-search-advanced',
                             'retrieval-quality']
+    elif framework == 'standalone-evaluations':
+        framework = 'evaluations'
+        template_choices = ['deep-evals', 'mlflow-evals', 'phoenix-evals', 'ragas-evals']
     # Use InquirerPy to select template with arrow keys
     template = inquirer.select(
         message="Which template would you like to use?",
