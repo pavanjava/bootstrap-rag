@@ -18,7 +18,7 @@ from phoenix.otel import register
 from openinference.instrumentation.langchain import LangChainInstrumentor
 import phoenix as px
 
-px.launch_app().view()
+px.launch_app()
 tracer_provider = register(
     project_name="simple-rag",
     endpoint="http://127.0.0.1:4317",  # change this to remote if needed
