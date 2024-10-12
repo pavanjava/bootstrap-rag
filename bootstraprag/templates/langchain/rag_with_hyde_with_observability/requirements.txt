@@ -1,0 +1,11 @@
+langchain==0.3.3
+langchain-ollama==0.2.0
+langchain-community==0.3.2
+langchain-qdrant==0.1.4
+unstructured[all-docs]==0.15.14
+pydantic==2.9.2
+qdrant-client==1.12.0
+litserve==0.2.2
+arize-phoenix==5.2.2
+arize-phoenix-otel==0.5.1
+openinference-instrumentation-langchain==0.1.28
