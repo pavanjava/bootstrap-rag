@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the goal of MLOps?",
+    "ground_truth": "The goal of MLOps is to facilitate the creation of machine learning products by bridging the gap between development (Dev) and operations (Ops).",
+    "context": "MLOps (Machine Learning Operations) is a paradigm, including aspects like best practices, sets of concepts, as well as a development culture when it comes to the end-to-end conceptualization, implementation, monitoring, deployment, and scalability of machine learning products."
+  },
+  {
+    "question": "What are the key principles of MLOps?",
+    "ground_truth": "The key principles of MLOps are CI/CD automation, workflow orchestration, reproducibility, versioning of data/model/code, collaboration, continuous ML training and evaluation, ML metadata tracking and logging, continuous monitoring, and feedback loops.",
+    "context": "MLOps aims to facilitate the creation of machine learning products by leveraging these principles: CI/CD automation, workflow orchestration, reproducibility; versioning of data, model, and code; collaboration; continuous ML training and evaluation; ML metadata tracking and logging; continuous monitoring; and feedback loops."
+  },
+  {
+    "question": "What disciplines does MLOps combine?",
+    "ground_truth": "MLOps combines machine learning, software engineering (especially DevOps), and data engineering.",
+    "context": "Most of all, it is an engineering practice that leverages three contributing disciplines: machine learning, software engineering (especially DevOps), and data engineering."
+  },
+  {
+    "question": "What roles are necessary for successfully implementing MLOps?",
+    "ground_truth": "Business stakeholder, solution architect, data scientist, data engineer, software engineer, DevOps engineer, and ML/MLOps engineer are necessary roles for successfully implementing MLOps.",
+    "context": "MLOps is an interdisciplinary group process, and the interplay of different roles is crucial to design, manage, automate, and operate an ML system in production. The roles are: Business Stakeholder, Solution Architect, Data Scientist, Data Engineer, Software Engineer, DevOps Engineer, ML Engineer/MLOps Engineer."
+  },
+  {
+    "question": "What does the ML engineer/MLOps engineer role do?",
+    "ground_truth": "The ML engineer or MLOps engineer has cross-domain knowledge, combining skills from data scientists, data engineers, software engineers, DevOps engineers, and backend engineers. They build and operate the ML infrastructure, manage automated ML workflows and model deployment, and monitor the ML system.",
+    "context": "The ML engineer or MLOps engineer combines aspects of several roles and thus has cross-domain knowledge. This role incorporates skills from data scientists, data engineers, software engineers, DevOps engineers, and backend engineers. This cross-domain role builds up and operates the ML infrastructure, manages the automated ML workflow pipelines and model deployment to production, and monitors both the model and the ML infrastructure."
+  },
+  {
+    "question": "What are some open-source MLOps tools and frameworks?",
+    "ground_truth": "Some open-source MLOps tools and frameworks are TensorFlow Extended (TFX), Airflow, Kubeflow, and MLflow.",
+    "context": "Open-source examples: TensorFlow Extended (configuration framework providing libraries for end-to-end ML pipeline tasks), Airflow (task and workflow orchestration tool), Kubeflow (Kubernetes-based end-to-end ML platform), MLflow (ML platform for managing ML lifecycle end-to-end)."
+  },
+  {
+    "question": "What are some commercial MLOps platforms?",
+    "ground_truth": "Some commercial MLOps platforms are Amazon SageMaker, Azure ML, GCP Vertex AI, and IBM Watson Studio.",
+    "context": "Commercial examples: Amazon SageMaker (end-to-end ML platform with feature store, orchestration, model serving), Azure ML (end-to-end ML platform with Azure DevOps Pipelines), GCP Vertex AI (fully managed end-to-end platform), IBM Cloud Pak for Data/Watson Studio (package offering data and ML capabilities)."
+  },
+  {
+    "question": "How does continuous monitoring work in MLOps?",
+    "ground_truth": "The monitoring component continuously observes the model serving performance and infrastructure in real-time. If a certain threshold is reached, like low prediction accuracy, the information is forwarded via a feedback loop to enable retraining or adjustments.",
+    "context": "The monitoring component observes continuously the model-serving performance and infrastructure in real-time. Once a certain threshold is reached, such as detection of low prediction accuracy, the information is forwarded via the feedback loop. The feedback loop is connected to the monitoring component and ensures fast and direct feedback allowing for more robust and improved predictions. It enables continuous training, retraining, and improvement."
+  },
+  {
+    "question": "What are some organizational challenges for adopting MLOps?",
+    "ground_truth": "Organizational challenges for adopting MLOps include the need for a culture shift from model-driven to product-oriented ML, lack of highly skilled experts for necessary MLOps roles, inadequate MLOps education for data scientists, and teams working in silos rather than collaboratively.",
+    "context": "Organizational challenges: The mindset and culture of data science practice is a typical challenge. To successfully develop and run ML products, there needs to be a culture shift away from model-driven machine learning toward a product-oriented discipline. A great number of skills and individual roles are required for MLOps and there is a lack of highly skilled experts for these roles. MLOps is typically not part of data science education. MLOps needs to be a group process but this is often hindered because teams work in silos rather than in cooperative setups."
+  },
+  {
+    "question": "What are some operational challenges for MLOps?",
+    "ground_truth": "Operational challenges for MLOps include the difficulty of manually operating ML due to complex software and hardware components, the need for robust automation especially for repetitive tasks like retraining, managing the large number of artifacts generated, and troubleshooting issues that can span ML infrastructure and software.",
+    "context": "Operational challenges: In productive settings, it is challenging to operate ML manually due to different stacks of software and hardware components and their interplay. Therefore, robust automation is required. Also, a constant incoming stream of new data forces retraining capabilities. This is a repetitive task which requires a high level of automation. These repetitive tasks yield a large number of artifacts that require a strong governance as well as versioning of data, model, and code to ensure robustness and reproducibility. It is challenging to resolve a potential support request, as many parties and components are involved. Failures can be a combination of ML infrastructure and software."
+  },
+  {
+    "question": "What are the steps involved in the MLOps project initiation phase?",
+    "ground_truth": "The steps in MLOps project initiation are: business problem analysis by the business stakeholder, architecture design by the solution architect, deriving the ML problem from the business goal by the data scientist, understanding required data by the data scientist and data engineer, and connecting to raw data for initial analysis by the data scientist and data engineer.",
+    "context": "MLOps project initiation: (1) The business stakeholder analyzes the business and identifies a potential business problem that can be solved using ML. (2) The solution architect defines the architecture design for the overall ML system and decides on the technologies to be used after a thorough evaluation. (3) The data scientist derives an ML problem from the business goal. (4) The data engineer and the data scientist work together to understand which data is required to solve the problem. (5) The data engineer and data scientist collaborate to locate the raw data sources for the initial data analysis."
+  },
+  {
+    "question": "What are the steps in the feature engineering pipeline?",
+    "ground_truth": "The steps in the feature engineering pipeline are: connecting to raw data, data extraction, data transformation and cleaning, feature engineering to calculate new features, and data ingestion to load the data into the feature store system.",
+    "context": "Feature engineering pipeline: (8) Connect to the raw data. (9) Extract the data from the data sources. (10) Data preprocessing begins with data transformation and cleaning tasks to bring the data into a usable format. (11) The feature engineering task calculates new and more advanced features based on other features. (12) Lastly, a data ingestion job loads batch or streaming data into the feature store system."
+  },
+  {
+    "question": "What steps are involved in the experimentation phase of MLOps?",
+    "ground_truth": "The experimentation phase involves the data scientist connecting to the feature store for data analysis, preparing and validating the data, performing model engineering by estimating the best algorithm and hyperparameters through iterative training and validation, and finally exporting the model and committing the code to the repository.",
+    "context": "Experimentation: (13) The data scientist connects to the feature store system for the data analysis. (14) Preparation and validation of the data coming from the feature store system, including train and test split. (15) The data scientist estimates the best-performing algorithm and hyperparameters, and the model training is triggered with the training data. (16) Model engineering aims to identify the best-performing algorithm and hyperparameters through iterative model training and validation. (17) The data scientist exports the model and commits the code to the repository."
+  },
+  {
+    "question": "How does the automated ML workflow pipeline function?",
+    "ground_truth": "The automated ML workflow pipeline involves automatically pulling versioned features from the feature store, data preparation and validation, final model training using predefined algorithm and hyperparameters, automated model evaluation and iterative adjustments, exporting the trained model, pushing it to the model registry, and deploying it for production serving.",
+    "context": "Automated ML workflow pipeline: (18) automated pulling of the versioned features from the feature store systems. (19) Automated data preparation and validation. (20) Automated final model training on new unseen data using predefined algorithm and hyperparameters. (21) Automated model evaluation and iterative adjustments of hyperparameters. (22) The trained model is exported and (23) pushed to the model registry. (24) The CI/CD component triggers the continuous deployment pipeline to build, test and deploy the production-ready ML model for production serving."
+  },
+  {
+    "question": "What information is recorded in the ML metadata store?",
+    "ground_truth": "The ML metadata store records parameters and resulting performance metrics for each training job iteration, training job details like training date/time and duration, sources of artifacts used to train the model, and the model version and status.",
+    "context": "For all training job iterations, the ML metadata store records metadata such as parameters to train the model and the resulting performance metrics. This also includes the tracking and logging of the training job ID, training date and time, duration, and sources of artifacts. Additionally, the model specific metadata called \"model lineage\" combining the lineage of data and code is tracked for each newly registered model. This includes the source and version of the feature data and model training code used to train the model. Also, the model version and status (e.g., staging or production-ready) is recorded."
+  },
+  {
+    "question": "What are the different types of model serving that can be configured?",
+    "ground_truth": "The model serving component can be configured for online inference for real-time predictions or batch inference for predictions on large volumes of input data.",
+    "context": "The model serving component can be designed by the software engineer as online inference for real-time predictions or as batch inference for predictions concerning large volumes of input data. For real-time predictions, features must come from the online database (low latency), whereas for batch predictions, features can be served from the offline database (normal latency)."
+  },
+  {
+    "question": "How can concept drift trigger retraining in MLOps?",
+    "ground_truth": "When the model monitoring component detects a drift in the data, the information is forwarded to the scheduler which then triggers the automated ML workflow pipeline for retraining.",
+    "context": "The detection of concept drifts as a feedback mechanism can enable continuous training. For instance, once the model-monitoring component detects a drift in the data, the information is forwarded to the scheduler, which then triggers the automated ML workflow pipeline for retraining (continuous training)."
+  },
+  {
+    "question": "What ML system challenges does MLOps face?",
+    "ground_truth": "A major ML system challenge in MLOps is designing for fluctuating demand, especially for ML training, due to potentially large and varying data volumes which makes it difficult to estimate required infrastructure resources.",
+    "context": "ML system challenges: A major challenge with regard to MLOps systems is designing for fluctuating demand, especially in relation to the process of ML training. This stems from potentially voluminous and varying data, which makes it difficult to precisely estimate the necessary infrastructure resources (CPU, RAM, and GPU) and requires a high level of flexibility in terms of scalability of the infrastructure."
+  },
+  {
+    "question": "Where does MLOps fit in relation to other disciplines?",
+    "ground_truth": "MLOps is positioned at the intersection of machine learning, software engineering, DevOps, and data engineering.",
+    "context": "It becomes obvious that the term MLOps is positioned at the intersection of machine learning, software engineering, DevOps, and data engineering."
+  },
+  {
+    "question": "What are some strategies to address the lack of MLOps skills and knowledge?",
+    "ground_truth": "Strategies to address the lack of MLOps skills include shifting data science education to cover MLOps technologies and building ML products, convincing decision-makers that increased MLOps maturity will yield business value to get buy-in for upskilling, and fostering cross-functional collaboration to break down team silos.",
+    "context": "A great number of skills and individual roles are required for MLOps and there is a lack of highly skilled experts for these roles. MLOps is typically not part of data science education. Students should not only learn about model creation, but must also learn about technologies and components necessary to build functional ML products. To lay the foundations for more fruitful setups, the respective decision-makers need to be convinced that an increased MLOps maturity and a product-focused mindset will yield clear business improvements. Additionally, MLOps needs to be a group process but this is often hindered because teams work in silos rather than in cooperative setups."
+  }
+]
