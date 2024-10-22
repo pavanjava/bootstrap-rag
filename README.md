@@ -6,9 +6,11 @@ This project will bootstrap and scaffold the projects for specific semantic sear
 ![Arch](assets/architecture.png)
 
 ### Installing prerequisite
+
 #### Option-1
 - install ollama following this [guide](https://ollama.com/download)
 - install qdrant follwing this [guide](https://qdrant.tech/documentation/guides/installation/)
+
 #### Option-2
 - In the root folder run `docker compose -f docker-compose-dev.yml up`
 - One the containers are up and running run `docker exec -it ollama_service sh`
