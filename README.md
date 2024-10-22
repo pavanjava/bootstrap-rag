@@ -33,7 +33,7 @@ This project will bootstrap and scaffold the projects for specific semantic sear
   <b>[or]</b> run `python api_server.py`
 
 
-Note: Only `llamaindex` and `Qdrant Search` are functional for now, others frameworks [`langchain`, `langgraph`, `haystack`] in progress.
+Note: `llamaindex`, `langchain`, `Qdrant Search` and `RAG evaluations` are functional for now, others frameworks [`langgraph`, `haystack`] in progress.
 
 #### Resources
 
