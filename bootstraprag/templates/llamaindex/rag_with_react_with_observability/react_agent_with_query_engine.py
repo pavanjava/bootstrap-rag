@@ -10,11 +10,10 @@ from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core.agent import ReActAgent
 from llama_index.llms.ollama import Ollama
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
+from langfuse.llama_index import LlamaIndexInstrumentor
 from rag_evaluator import RAGEvaluator
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
-import llama_index
-import phoenix as px
 import qdrant_client
 import logging
 import os
@@ -25,8 +24,8 @@ logging.basicConfig(level=int(os.environ['INFO']))
 logger = logging.getLogger(__name__)
 
 # instrumenting observability
-session = px.launch_app()
-llama_index.core.set_global_handler("arize_phoenix")
+instrumentor = LlamaIndexInstrumentor()
+instrumentor.start()
 
 
 class ReActWithQueryEngine:
