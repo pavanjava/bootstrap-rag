@@ -1,5 +1,12 @@
-## Instructions to run the code
-
+## Self-Correcting RAG
+#### How to spin observability
+- run `docker compose -f docker-compose-langfuse.yml up`
+- launch langfuse in browser `http://localhost:3000`
+- click on `signup`
+- create `organization` & `project`
+- once done create your `public` and `private` api keys
+- 
+#### Instructions to run the code
 - Navigate to the root of the project and run the below command
 - `pip install -r requirements.txt`
 - open `.env` file update your qdrant url `DB_URL` & password `DB_API_KEY`

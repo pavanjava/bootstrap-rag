@@ -12,12 +12,11 @@ from llama_index.core.base.response.schema import Response, StreamingResponse, A
 from llama_index.core.query_engine import RetryQueryEngine, RetrySourceQueryEngine, RetryGuidelineQueryEngine
 from llama_index.core.evaluation import RelevancyEvaluator, GuidelineEvaluator
 from llama_index.core.evaluation.guideline import DEFAULT_GUIDELINES
+from langfuse.llama_index import LlamaIndexInstrumentor
 from rag_evaluator import RAGEvaluator
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
 import qdrant_client
-import llama_index
-import phoenix as px
 import logging
 import os
 
@@ -27,8 +26,8 @@ logging.basicConfig(level=int(os.environ['INFO']))
 logger = logging.getLogger(__name__)
 
 # instrumenting observability
-session = px.launch_app()
-llama_index.core.set_global_handler("arize_phoenix")
+instrumentor = LlamaIndexInstrumentor()
+instrumentor.start()
 
 
 class SelfCorrectingRAG:
