@@ -19,13 +19,12 @@ from llama_index.llms.ollama import Ollama
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.indices.query.query_transform import HyDEQueryTransform
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
+from langfuse.llama_index import LlamaIndexInstrumentor
 from rag_evaluator import RAGEvaluator
 import qdrant_client
 import logging
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
-import phoenix as px
-import llama_index
 
 _ = load_dotenv(find_dotenv())
 
@@ -33,8 +32,8 @@ logging.basicConfig(level=int(os.environ['INFO']))
 logger = logging.getLogger(__name__)
 
 # instrumenting observability
-session = px.launch_app()
-llama_index.core.set_global_handler("arize_phoenix")
+instrumentor = LlamaIndexInstrumentor()
+instrumentor.start()
 
 
 class BaseRAG:
