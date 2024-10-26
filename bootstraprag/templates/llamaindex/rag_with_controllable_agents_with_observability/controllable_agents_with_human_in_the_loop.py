@@ -10,16 +10,15 @@ from llama_index.llms.openai import OpenAI
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core.agent import ReActAgent
 from llama_index.vector_stores.qdrant import QdrantVectorStore
+from langfuse.llama_index import LlamaIndexInstrumentor
 from rag_evaluator import RAGEvaluator
 from dotenv import load_dotenv, find_dotenv
 import qdrant_client
 import logging
-import phoenix as px
-import llama_index
 
 # instrumenting observability
-session = px.launch_app()
-llama_index.core.set_global_handler("arize_phoenix")
+instrumentor = LlamaIndexInstrumentor()
+instrumentor.start()
 
 
 class ControllableAgentsWithHumanInLoop:
