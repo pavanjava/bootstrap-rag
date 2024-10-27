@@ -43,7 +43,9 @@ def create(project_name, framework, template, observability):
 
     elif framework == 'langchain':
         template_choices = [
-            'simple-rag'
+            'simple-rag',
+            'rag-with-hyde',
+            'llm-as-judge'
         ]
     elif framework == 'standalone-qdrant':
         framework = 'qdrant'
