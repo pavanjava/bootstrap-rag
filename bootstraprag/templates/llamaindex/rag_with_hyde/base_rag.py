@@ -65,7 +65,7 @@ class BaseRAG:
         Settings.llm = llm
         Settings.transformations = [self.text_parser]
 
-        self.rag_evaluator = RAGEvaluator
+        self.rag_evaluator = RAGEvaluator()
 
         self.text_chunks = []
         self.doc_ids = []
