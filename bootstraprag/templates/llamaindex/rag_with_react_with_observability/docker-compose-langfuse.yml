@@ -2,11 +2,10 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:13
+    image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin@123
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: langfuse
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -17,7 +16,7 @@ services:
     image: langfuse/langfuse:latest
     container_name: langfuse
     environment:
-      DATABASE_URL: postgresql://hello:mysecretpassword@postgres:5432/langfuse
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/langfuse
       NEXTAUTH_URL: http://localhost:3000
       NEXTAUTH_SECRET: mysecret
       SALT: mysalt
