@@ -1,6 +1,6 @@
 import os
 import logging
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core.postprocessor import LLMRerank, SentenceTransformerRerank, LongContextReorder
 from llama_index.llms.openai import OpenAI
@@ -30,12 +30,16 @@ class LlamaIndexEvaluator:
         logger.info(
             f"Initializing LlamaIndexEvaluator with input_dir={input_dir}, model_name={model_name}, base_url={base_url}")
 
+        Settings.llm = Ollama(model=os.environ.get('llm_model'), base_url=base_url)
+        Settings.embed_model = OllamaEmbedding(model_name=os.environ.get('embed_model_name'), base_url=base_url)
+
         self.input_dir = input_dir
         self.model_name = model_name
         self.base_url = base_url
         self.documents = self.load_documents()
+        self.index_data(documents=self.documents)
         self.top_k = int(os.environ.get('retrieve_top_k'))
-        Settings.llm = Ollama(model=self.model_name, base_url=self.base_url)
+
         logger.info(f"Loading dataset from {os.environ.get('gold_dataset_file')}")
         self.dataset = pd.read_json(os.path.join(input_dir, os.environ.get('gold_dataset_file')))
         self.query_engine = self.build_query_engine(postprocessing_method=os.environ.get('postprocessing_method'))
@@ -47,6 +51,17 @@ class LlamaIndexEvaluator:
             show_progress=True)
         logger.info(f"Loaded {len(documents)} documents")
         return documents
+
+    def index_data(self, documents):
+        logger.info("Indexing data in Qdrant")
+        # Initialize Qdrant client
+        qdrant_cli = qdrant_client.QdrantClient(url=os.environ.get("qdrant_url"),
+                                                api_key=os.environ.get("qdrant_api_key"))
+        qdrant_vector_store = QdrantVectorStore(collection_name=os.environ.get("collection_name"), client=qdrant_cli)
+        storage_context = StorageContext.from_defaults(vector_store=qdrant_vector_store)
+        if not qdrant_cli.collection_exists(collection_name=os.environ.get("collection_name")):
+            VectorStoreIndex.from_documents(storage_context=storage_context, documents=documents, show_progress=True)
+        logger.info("Indexing data in Qdrant finished")
 
     def build_query_engine(self, postprocessing_method: str):
         logger.info("Initializing Qdrant client")
@@ -71,16 +86,18 @@ class LlamaIndexEvaluator:
         if os.environ.get('enable_postprocessing_method') == 'true' and postprocessing_method == 'llm_reranker':
             reranker = LLMRerank(llm=Settings.llm, choice_batch_size=self.top_k)
             query_engine = vector_index.as_query_engine(top_k=self.top_k, node_postprocessors=[reranker])
-        elif os.environ.get('enable_postprocessing_method') == 'true' and postprocessing_method == 'sentence_transformer_rerank':
+        elif os.environ.get(
+                'enable_postprocessing_method') == 'true' and postprocessing_method == 'sentence_transformer_rerank':
             reranker = SentenceTransformerRerank(
                 model="cross-encoder/ms-marco-MiniLM-L-2-v2", top_n=self.top_k
             )
             query_engine = vector_index.as_query_engine(top_k=self.top_k, node_postprocessors=[reranker])
-        elif os.environ.get('enable_postprocessing_method') == 'true' and postprocessing_method == 'long_context_reorder':
+        elif os.environ.get(
+                'enable_postprocessing_method') == 'true' and postprocessing_method == 'long_context_reorder':
             reorder = LongContextReorder()
             query_engine = vector_index.as_query_engine(top_k=self.top_k, node_postprocessors=[reorder])
-
-        query_engine = vector_index.as_query_engine(similarity_top_k=self.top_k, llm=Settings.llm)
+        else:
+            query_engine = vector_index.as_query_engine(similarity_top_k=self.top_k, llm=Settings.llm)
         logger.info(f"Query engine built successfully: {query_engine}")
         return query_engine
 
