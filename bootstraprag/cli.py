@@ -33,6 +33,7 @@ def create(project_name, framework, template, observability):
             'rag-with-react',
             'rag-with-hyde',
             'rag-with-flare',
+            'rag-with-vision',
             'rag-with-self-correction',
             'rag-with-controllable-agents',
             'rag-with-llama-parse',
@@ -50,7 +51,7 @@ def create(project_name, framework, template, observability):
     elif framework == 'standalone-qdrant':
         framework = 'qdrant'
         template_choices = ['simple-search', 'multimodal-search', 'hybrid-search', 'hybrid-search-advanced',
-                            'retrieval-quality']
+                            'retrieval-quality', 'semantic-cache']
     elif framework == 'standalone-evaluations':
         framework = 'evaluations'
         template_choices = ['deep-evals', 'mlflow-evals', 'phoenix-evals', 'ragas-evals']
