@@ -1,2 +1,3 @@
 semantic-router[qdrant]
 python-dotenv==1.0.1
+litserve==0.2.4
