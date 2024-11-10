@@ -4,3 +4,13 @@ Semantic Router is a superfast decision-making layer for your LLMs and agents. R
 ### How to execute code
 1. `pip install -r requirements.txt`
 2. `python main.py`
+
+### Expose Semantic Router as API
+- `python api_server.py`
+```text
+API: http://localhost:8000/api/v1/chat-completion
+Method: POST
+payload: {
+  "question": "what is the Weather today?"
+}
+```
