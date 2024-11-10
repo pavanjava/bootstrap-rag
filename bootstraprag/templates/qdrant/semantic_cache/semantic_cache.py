@@ -13,7 +13,7 @@ class SemanticCache:
         # load the data from env
         load_dotenv(find_dotenv())
 
-        self.encoder = SentenceTransformer('all-MiniLM-L6-v2')
+        self.encoder = SentenceTransformer(model_name_or_path=os.environ.get('model_name_or_path'))
         self.cache_client = QdrantClient(url=os.environ.get('QDRANT_URL'), api_key=os.environ.get('QDRANT_API_KEY'))
         self.cache_collection_name = "cache"
         self.threshold = threshold
@@ -78,7 +78,7 @@ def compute_response(query: str):
     return f"Computed response for: {query} is {assistant_message}"
 
 
-semantic_cache = SemanticCache(threshold=0.8)
-query = "What is the capital of France?"
-response = semantic_cache.get_response(query, compute_response)
-print(response)
+# semantic_cache = SemanticCache(threshold=0.8)
+# query = "What is the capital of France?"
+# response = semantic_cache.get_response(query, compute_response)
+# print(response)
