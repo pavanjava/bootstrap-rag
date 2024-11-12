@@ -1,0 +1,10 @@
+llama-index-agent-introspective
+llama-index-llms-openai
+llama-index-llms-ollama
+llama-index-embeddings-ollama
+llama-index-vector-stores-qdrant
+llama-index-program-openai
+llama-index-readers-file
+yfinance
+pandas
+python-dotenv
