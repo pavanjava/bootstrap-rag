@@ -1,5 +1,4 @@
 import litserve as lit
-
 from agent_core import StockDataRetrieverTool, FinancialAgentBuilder
 
 # Query example
