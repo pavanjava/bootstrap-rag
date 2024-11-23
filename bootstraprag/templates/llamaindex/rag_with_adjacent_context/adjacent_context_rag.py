@@ -25,7 +25,8 @@ class AdjacentContextRAG:
         llm = Ollama(model=os.environ.get("OLLAMA_LLM_MODEL"), base_url=os.environ.get("OLLAMA_BASE_URL"))
         embedding = OllamaEmbedding(model_name=os.environ.get("OLLAMA_EMBED_MODEL"),
                                     base_url=os.environ.get("OLLAMA_BASE_URL"))
-        self.qdrant_client = qdrant_client.QdrantClient(url=os.environ.get("DB_URL"), api_key=os.environ.get("DB_API_KEY"))
+        self.qdrant_client = qdrant_client.QdrantClient(url=os.environ.get("DB_URL"),
+                                                        api_key=os.environ.get("DB_API_KEY"))
 
         Settings.llm = llm
         Settings.embed_model = embedding
