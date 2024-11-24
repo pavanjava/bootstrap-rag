@@ -1,0 +1,11 @@
+llama-index
+llama-index-llms-openai
+llama-index-llms-ollama
+llama-index-embeddings-ollama
+llama-index-embeddings-openai
+llama-index-vector-stores-qdrant
+qdrant-client
+litserve
+python-dotenv
+# observability
+langfuse==2.52.2
