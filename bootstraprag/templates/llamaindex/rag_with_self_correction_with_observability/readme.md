@@ -5,7 +5,7 @@
 - click on `signup`
 - create `organization` & `project`
 - once done create your `public` and `private` api keys
-- 
+
 #### Instructions to run the code
 - Navigate to the root of the project and run the below command
 - `pip install -r requirements.txt`

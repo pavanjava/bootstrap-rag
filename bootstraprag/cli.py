@@ -38,6 +38,8 @@ def create(project_name, framework, template, observability):
             'rag-with-controllable-agents',
             'rag-with-llama-parse',
             'rag-with-adjacent-context',
+            'rag-with-sub-question-query-engine',
+            'rag-with-recursive-retriever',
             'rag-with-citation',
             'agents-with-introspection',
             'llama-deploy-with-simplemq',
