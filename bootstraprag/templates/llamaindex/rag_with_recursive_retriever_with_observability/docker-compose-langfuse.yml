@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: langfuse
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - langfuse-network
+
+  langfuse:
+    image: langfuse/langfuse:latest
+    container_name: langfuse
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/langfuse
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: mysecret
+      SALT: mysalt
+      ENCRYPTION_KEY: 98637d42c277ef10b8a324e25d492daa8eee8f769574124ba25132f71481f183
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - langfuse-network
+
+volumes:
+  postgres_data:
+
+networks:
+  langfuse-network:
+    driver: bridge
