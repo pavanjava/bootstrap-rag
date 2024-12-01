@@ -27,6 +27,7 @@ class RecursiveAgentManager:
         self.document_data = {}
         self.agents = {}
         self.query_engine = None
+        self.client: qdrant_client.QdrantClient = None
 
         # Load environment variables
         load_dotenv(find_dotenv())
@@ -60,6 +61,7 @@ class RecursiveAgentManager:
             url=os.environ['DB_URL'],
             api_key=os.environ['DB_API_KEY']
         )
+        self.client = client
         self.vector_store = QdrantVectorStore(
             client=client,
             collection_name=os.environ['COLLECTION_NAME']
@@ -91,11 +93,16 @@ class RecursiveAgentManager:
     def _build_agents(self):
         """Build agents with their respective tools."""
         for agent_name in self.agent_names:
-            # Build indices
-            vector_index = VectorStoreIndex.from_documents(
-                self.document_data[agent_name],
-                storage_context=self.storage_context
-            )
+
+            if not self.client.collection_exists(collection_name=os.environ.get("COLLECTION_NAME")):
+                # Build indices
+                vector_index = VectorStoreIndex.from_documents(
+                    self.document_data[agent_name],
+                    storage_context=self.storage_context
+                )
+            else:
+                vector_index = VectorStoreIndex.from_vector_store(vector_store=self.vector_store)
+
             summary_index = SummaryIndex.from_documents(
                 self.document_data[agent_name],
                 storage_context=self.storage_context
