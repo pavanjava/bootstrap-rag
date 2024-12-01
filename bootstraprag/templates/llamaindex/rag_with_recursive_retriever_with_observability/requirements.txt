@@ -1,0 +1,8 @@
+llamaindex
+llama-index-llms-ollama
+llama-index-llms-openai
+llama-index-agent-openai
+llama-index-vector-stores-qdrant
+qdrant-client
+# observability
+langfuse==2.52.2
