@@ -16,7 +16,7 @@ The Sub-Question Query Engine in LlamaIndex is designed to handle complex querie
 }
 ```
 
-#### How to spin observability
+#### How to spin observability (langfuse)
 - run `docker compose -f docker-compose-langfuse.yml up`
 - launch langfuse in browser `http://localhost:3000`
 - click on `signup`
