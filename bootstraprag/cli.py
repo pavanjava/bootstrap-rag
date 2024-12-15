@@ -22,7 +22,8 @@ def create_zip(project_name):
 @click.option('--observability', type=click.Choice([]), prompt=False)
 def create(project_name, framework, template, observability):
     template_choices = []
-    framework_choices = ['llamaindex', 'langchain', 'standalone-qdrant', 'standalone-evaluations']
+    framework_choices = ['llamaindex', 'langchain', 'standalone-qdrant', 'standalone-evaluations', 'phidata', 'crewai',
+                         'mem0']
     framework = inquirer.select(
         message="Which technology would you like to use?",
         choices=framework_choices
@@ -71,6 +72,19 @@ def create(project_name, framework, template, observability):
             'mlflow-evals',
             'phoenix-evals',
             'ragas-evals'
+        ]
+    elif framework == 'phidata':
+        template_choices = [
+            'agentic-rag'
+        ]
+    elif framework == 'mem0':
+        template_choices = [
+            'personal-ai-assistant-with-memory',
+            'react-agent-with-memory'
+        ]
+    elif framework == 'crewai':
+        template_choices = [
+            'rag-with-crewai-and-llamaindex'
         ]
     # Use InquirerPy to select template with arrow keys
     template = inquirer.select(
