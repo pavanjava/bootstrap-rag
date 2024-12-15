@@ -119,7 +119,7 @@ class ReActWithQueryEngine:
         #     and veteran stock market investor.
         # """
         self.agent = ReActAgent.from_tools(
-            self.query_engine_tools,
+            tools=self.query_engine_tools,
             llm=Settings.llm,
             verbose=True,
             # context=context
