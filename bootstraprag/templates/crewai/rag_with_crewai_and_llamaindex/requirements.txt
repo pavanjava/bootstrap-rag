@@ -1,0 +1,8 @@
+crewai==0.86.0
+crewai-tools==0.17.0
+llama-index==0.12.5
+llama-index-vector-stores-qdrant==0.4.0
+llama-index-llms-ollama==0.5.0
+llama-index-embeddings-ollama==0.5.0
+qdrant-client==1.12.1
+litserve==0.2.5

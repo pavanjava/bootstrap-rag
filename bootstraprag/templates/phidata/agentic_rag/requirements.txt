@@ -1,0 +1,4 @@
+phidata==2.7.2
+python-dotenv==1.0.1
+qdrant-client==1.12.1
+litserve==0.2.5
