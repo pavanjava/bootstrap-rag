@@ -1,0 +1,4 @@
+openai==1.57.4
+mem0ai==0.1.34
+python-dotenv==1.0.1
+litserve==0.2.5
