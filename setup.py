@@ -6,7 +6,7 @@ long_description = (doc_path / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='bootstrap-rag',
-    version='0.0.17',
+    version='0.0.18',
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
