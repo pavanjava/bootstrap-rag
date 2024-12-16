@@ -12,11 +12,11 @@ from llama_index.llms.ollama import Ollama
 from llama_index.core.base.response.schema import Response, StreamingResponse, AsyncStreamingResponse, PydanticResponse
 from dotenv import load_dotenv, find_dotenv
 from typing import Union
-from mem0_configs import config, context
 from llama_index.memory.mem0 import Mem0Memory
 import qdrant_client
 import logging
 import os
+import uuid
 
 _ = load_dotenv(find_dotenv())
 
@@ -30,7 +30,7 @@ class ReActWithQueryEngine:
     ]
 
     def __init__(self, input_dir: str, similarity_top_k: int = 3, chunk_size: int = 128, chunk_overlap: int = 100,
-                 show_progress: bool = False, no_of_iterations: int = 5, required_exts: list[str] = ['.pdf', '.txt']):
+                 show_progress: bool = False, no_of_iterations: int = 20, required_exts: list[str] = ['.pdf', '.txt']):
         self.index_loaded = False
         self.similarity_top_k = similarity_top_k
         self.input_dir = input_dir
@@ -43,6 +43,38 @@ class ReActWithQueryEngine:
         self.required_exts = required_exts
 
         # the mem0 configs for llamaindex
+        context = {
+            "user_id": "pavan_mantha",
+            "agent_id": "react_agent",
+            "run_id": str(uuid.uuid4()),
+        }
+
+        config = {
+            "vector_store": {
+                "provider": "qdrant",
+                "config": {
+                    "collection_name": "react-agent-with-memory",
+                    "url": "http://localhost:6333",
+                    "api_key": "th3s3cr3tk3y",
+                    "embedding_model_dims": 768
+                },
+            },
+            "llm": {
+                "provider": "ollama",
+                "config": {
+                    "model": "llama3.2:latest",
+                    "temperature": 0.2,
+                    "max_tokens": 1500,
+                },
+            },
+            "embedder": {
+                "provider": "ollama",
+                "config": {
+                    "model": "nomic-embed-text:latest"
+                },
+            }
+        }
+
         self.memory = Mem0Memory.from_config(
             context=context,
             config=config,

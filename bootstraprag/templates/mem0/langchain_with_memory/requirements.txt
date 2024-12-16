@@ -1,0 +1,4 @@
+langchain
+langchain-ollama
+mem0ai
+python-dotenv
